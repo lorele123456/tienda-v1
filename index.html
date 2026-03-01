@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pietra & Co. | Minimalismo Artesanal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --verde-bosque: #1B3022;
+            --crema: #F9F7F2;
+            --texto: #333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--crema); 
+            color: var(--texto);
+            line-height: 1.6;
+        }
+
+        h1, h2 { font-family: 'Playfair Display', serif; font-weight: 400; }
+
+        /* HEADER */
+        header {
+            padding: 2rem;
+            text-align: center;
+            background: var(--crema);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo { font-size: 1.5rem; letter-spacing: 4px; text-transform: uppercase; color: var(--verde-bosque); }
+
+        /* HERO */
+        .hero {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            background: #e5e5e5; /* Placeholder para tu imagen de fondo */
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 { font-size: 3rem; margin-bottom: 1rem; color: var(--verde-bosque); }
+
+        /* CATALOGO */
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .product-card {
+            background: white;
+            padding: 1rem;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .product-card img { width: 100%; height: 350px; object-fit: cover; margin-bottom: 1rem; }
+
+        .btn-order {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--verde-bosque);
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* SECCION HISTORIA */
+        .story {
+            padding: 4rem 0;
+            text-align: center;
+            background: white;
+        }
+
+        .story p { max-width: 600px; margin: 0 auto; font-style: italic; }
+
+        footer { padding: 4rem; text-align: center; font-size: 0.8rem; letter-spacing: 2px; }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Pietra & Co.</div>
+    </header>
+
+    <section class="hero">
+        <h1>Minimalismo Artesanal</h1>
+        <p>Objetos de diseño en eco-resina.</p>
+    </section>
+
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 3rem;">Colección Esencial</h2>
+        
+        <div class="grid">
+            <div class="product-card">
+                <img src="https://via.placeholder.com/400x500" alt="Bandeja Terrazo">
+                <h3>Bandeja Terrazo Neutro</h3>
+                <p>S/ 85.00</p>
+                <button class="btn-order" onclick="pedirWhatsApp('Bandeja Terrazo Neutro')">PEDIR VÍA WHATSAPP</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://via.placeholder.com/400x500" alt="Porta Vela">
+                <h3>Porta Vela Mármol</h3>
+                <p>S/ 45.00</p>
+                <button class="btn-order" onclick="pedirWhatsApp('Porta Vela Mármol')">PEDIR VÍA WHATSAPP</button>
+            </div>
+        </div>
+    </div>
+
+    <section class="story">
+        <h2>Nuestra Filosofía</h2>
+        <br>
+        <p>"Creemos en la belleza de lo imperfecto y el respeto por el material. Cada pieza de Pietra & Co. es vertida y pulida a mano en Lima, asegurando que no existan dos objetos iguales."</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 PIETRA & CO. - LIMA, PERÚ</p>
+        <p>Instagram | WhatsApp</p>
+    </footer>
+
+    <script>
+        function pedirWhatsApp(producto) {
+            const telefono = "51999888777"; // REEMPLAZA CON TU NÚMERO
+            const mensaje = encodeURIComponent(`Hola Pietra & Co.! Me interesa el producto: ${producto}. ¿Me darías más información?`);
+            window.open(`https://wa.me/${telefono}?text=${mensaje}`, '_blank');
+        }
+    </script>
+
+</body>
+</html>
