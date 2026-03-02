@@ -1,122 +1,140 @@
+// CONFIGURACIÓN GLOBAL
 const SHEET_ID = '1BoWQQk73dRJdH3NTHautP-aixEbDr3uRWgXfmlbUP20';
 const NUMERO_WA = "51987173565";
-const ENVIO_LIMA = 12;
+const COSTO_ENVIO = 12.00; // Envío a Lima
 
-let inventario = [];
+let db_productos = [];
 let carrito = [];
 
-// 1. CARGAR EXCEL
-async function cargarInventario() {
+// 1. CARGAR DATOS DEL EXCEL
+async function obtenerDatos() {
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
     try {
-        const res = await fetch(url);
-        const data = await res.text();
-        const filas = data.split(/\r?\n/).slice(1);
-        
-        inventario = filas.map(f => {
+        const respuesta = await fetch(url);
+        const csv = await respuesta.text();
+        const filas = csv.split(/\r?\n/).slice(1); // Ignorar cabecera
+
+        db_productos = filas.map(f => {
             const c = f.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/^"|"$/g, '').trim());
             
-            // CONVERSOR SEGURO DE DRIVE
-            let idImg = "";
-            let imgLink = c[4] || "";
-            if (imgLink.includes('/d/')) idImg = imgLink.split('/d/')[1].split('/')[0];
-            else if (imgLink.includes('id=')) idImg = imgLink.split('id=')[1].split('&')[0];
+            // Conversor de ID de Google Drive para imágenes
+            let imgId = "";
+            let linkOriginal = c[4] || "";
+            if (linkOriginal.includes('/d/')) imgId = linkOriginal.split('/d/')[1].split('/')[0];
+            else if (linkOriginal.includes('id=')) imgId = linkOriginal.split('id=')[1].split('&')[0];
             
-            const fotoFinal = idImg ? `https://lh3.googleusercontent.com/d/${idImg}` : "https://via.placeholder.com/400x500?text=PIETRA";
+            // URL Directa para visualización
+            const imgFinal = imgId ? `https://lh3.googleusercontent.com/d/${imgId}` : "https://via.placeholder.com/400x500?text=PIETRA";
 
             return {
                 id: c[0],
                 nombre: c[1],
                 precio: parseFloat(c[2]) || 0,
-                descripcion: c[3] || 'Pieza exclusiva de Pietra & Co.',
-                imagen: fotoFinal
+                descripcion: c[3] || 'Sin descripción disponible.',
+                imagen: imgFinal
             };
         }).filter(p => p.nombre);
 
-        mostrarProductos();
-    } catch (e) { console.error("Error cargando inventario", e); }
+        renderizarGaleria();
+    } catch (e) {
+        console.error("Error al cargar inventario", e);
+    }
 }
 
-// 2. MOSTRAR PRODUCTOS
-function mostrarProductos() {
-    const listado = document.getElementById('product-list');
-    listado.innerHTML = '';
+// 2. MOSTRAR PRODUCTOS EN EL GRID
+function renderizarGaleria() {
+    const contenedor = document.getElementById('product-list');
+    contenedor.innerHTML = '';
     
-    inventario.forEach(p => {
-        listado.innerHTML += `
+    db_productos.forEach(p => {
+        contenedor.innerHTML += `
             <div class="product-card">
                 <div class="img-container">
                     <img src="${p.imagen}" alt="${p.nombre}">
                 </div>
                 <h3>${p.nombre}</h3>
                 <p class="price">S/ ${p.precio.toFixed(2)}</p>
-                <span class="desc-toggle" onclick="toggleDesc(this)">+ Detalles</span>
+                
+                <span class="desc-toggle" onclick="toggleDetalles(this)">▼ Detalles</span>
                 <div class="desc-text">${p.descripcion}</div>
-                <button class="btn-add" onclick="agregarAlCarrito('${p.id}')">Añadir a Selección</button>
+
+                <button class="btn-add" onclick="agregarCarrito('${p.id}')">Añadir a Selección</button>
             </div>
         `;
     });
 }
 
-// 3. CARRITO
-function agregarAlCarrito(id) {
-    const p = inventario.find(item => item.id === id);
+// 3. LÓGICA DEL CARRITO
+function agregarCarrito(id) {
+    const p = db_productos.find(item => item.id === id);
     if (p) {
         carrito.push(p);
-        actualizarCarrito();
-        toggleCart(true); // Abrir al añadir
+        actualizarUI();
+        toggleCart(true); // Abrir carrito al añadir
     }
 }
 
-function actualizarCarrito() {
-    const lista = document.getElementById('cart-items');
-    const subTxt = document.getElementById('subtotal');
-    const totalTxt = document.getElementById('total-final');
-    const countTxt = document.getElementById('cart-count');
+function quitarCarrito(index) {
+    carrito.splice(index, 1);
+    actualizarUI();
+}
+
+function actualizarUI() {
+    const listaHtml = document.getElementById('cart-items');
+    const subHtml = document.getElementById('subtotal');
+    const totHtml = document.getElementById('total-final');
+    const countHtml = document.getElementById('cart-count');
     
-    lista.innerHTML = '';
+    listaHtml.innerHTML = '';
     let sub = 0;
 
     carrito.forEach((p, i) => {
         sub += p.precio;
-        lista.innerHTML += `
+        listaHtml.innerHTML += `
             <div class="cart-item">
                 <span>${p.nombre}</span>
-                <span>S/ ${p.precio.toFixed(2)} <button onclick="quitar(${i})" style="color:red; border:none; background:none; cursor:pointer; margin-left:10px;">✕</button></span>
+                <span>S/ ${p.precio.toFixed(2)} <button onclick="quitarCarrito(${i})" style="color:red; border:none; background:none; cursor:pointer; margin-left:8px;">✕</button></span>
             </div>
         `;
     });
 
-    subTxt.innerText = sub.toFixed(2);
-    totalTxt.innerText = (sub > 0 ? sub + ENVIO_LIMA : 0).toFixed(2);
-    countTxt.innerText = carrito.length;
+    const final = sub > 0 ? sub + COSTO_ENVIO : 0;
+    
+    subHtml.innerText = sub.toFixed(2);
+    totHtml.innerText = final.toFixed(2);
+    countHtml.innerText = carrito.length;
 }
 
-function quitar(index) {
-    carrito.splice(index, 1);
-    actualizarCarrito();
-}
-
+// 4. FUNCIONES DE INTERFAZ
 function toggleCart(open = null) {
-    const drawer = document.getElementById('cart-drawer');
-    if (open === true) drawer.classList.add('open');
-    else if (open === false) drawer.classList.remove('open');
-    else drawer.classList.toggle('open');
+    const cart = document.getElementById('cart-drawer');
+    if (open === true) cart.classList.add('open');
+    else if (open === false) cart.classList.remove('open');
+    else cart.classList.toggle('open');
 }
 
-function toggleDesc(btn) {
-    const text = btn.nextElementSibling;
-    text.classList.toggle('show');
-    btn.innerText = text.classList.contains('show') ? '- Cerrar' : '+ Detalles';
+function toggleDetalles(btn) {
+    const texto = btn.nextElementSibling;
+    texto.classList.toggle('show');
+    btn.innerText = texto.classList.contains('show') ? '▲ Cerrar' : '▼ Detalles';
 }
 
-// 4. WHATSAPP
+// 5. WHATSAPP
 function enviarWhatsApp() {
-    if (carrito.length === 0) return alert("Tu carrito está vacío");
-    let msg = `*PEDIDO PIETRA & CO.*\n\n`;
-    carrito.forEach(p => msg += `• ${p.nombre} (S/ ${p.precio.toFixed(2)})\n`);
-    msg += `\n*Envío Lima:* S/ ${ENVIO_LIMA}\n*TOTAL:* S/ ${document.getElementById('total-final').innerText}`;
-    window.open(`https://wa.me/${NUMERO_WA}?text=${encodeURIComponent(msg)}`, '_blank');
+    if (carrito.length === 0) return alert("Tu selección está vacía");
+    
+    let mensaje = `*PEDIDO PIETRA & CO.*\n\n`;
+    carrito.forEach(p => mensaje += `• ${p.nombre} (S/ ${p.precio.toFixed(2)})\n`);
+    
+    const sub = parseFloat(document.getElementById('subtotal').innerText);
+    const tot = document.getElementById('total-final').innerText;
+    
+    mensaje += `\n*Subtotal:* S/ ${sub.toFixed(2)}`;
+    mensaje += `\n*Envío Lima:* S/ ${COSTO_ENVIO.toFixed(2)}`;
+    mensaje += `\n*TOTAL A PAGAR:* S/ ${tot}`;
+    
+    window.open(`https://wa.me/${NUMERO_WA}?text=${encodeURIComponent(mensaje)}`, '_blank');
 }
 
-cargarInventario();
+// INICIAR
+obtenerDatos();
