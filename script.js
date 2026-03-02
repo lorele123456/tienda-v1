@@ -1,11 +1,8 @@
+/ CONFIGURACIÓN
 const SHEET_ID = '1BoWQQk73dRJdH3NTHautP-aixEbDr3uRWgXfmlbUP20';
 const NUMERO_WA = "51987173565";
 const ENVIO_LIMA = 12;
 
-let inventario = [];
-let carrito = [];
-
-// 1. Cargar datos del Excel
 async function cargarInventario() {
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
     try {
@@ -13,28 +10,35 @@ async function cargarInventario() {
         const data = await res.text();
         const filas = data.split(/\r?\n/).slice(1);
         
-        inventario = filas.map(f => {
+        const inventario = filas.map(f => {
             const c = f.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/^"|"$/g, '').trim());
             
-            // Convertir link de Drive
-            let img = c[4] || '';
+            // --- CONVERSOR DE DRIVE ACTUALIZADO ---
+            let img = c[4] || ''; 
             if (img.includes('drive.google.com')) {
-                const id = img.split('/d/')[1]?.split('/')[0] || img.split('id=')[1]?.split('&')[0];
-                img = `http://googleusercontent.com/profile/picture/6{id}`;
+                // Extraemos el ID del archivo sin importar el formato del link
+                let id = "";
+                if (img.includes('/d/')) {
+                    id = img.split('/d/')[1].split('/')[0];
+                } else if (img.includes('id=')) {
+                    id = img.split('id=')[1].split('&')[0];
+                }
+                // Usamos el servidor de miniaturas de Google (es más rápido y no falla)
+                img = `https://lh3.googleusercontent.com/d/${id}`;
             }
 
             return {
                 id: c[0],
                 nombre: c[1],
                 precio: parseFloat(c[2]) || 0,
-                descripcion: c[3] || 'Pieza exclusiva de Pietra & Co.', // Columna D para descripción
+                descripcion: c[3] || '',
                 imagen: img
             };
         }).filter(p => p.nombre);
 
-        mostrarProductos();
-    } catch (e) { console.error("Error cargando Excel", e); }
-}
+        mostrarProductos(inventario);
+    } catch (e) { console.error("Error", e); }
+}s
 
 // 2. Mostrar productos con zoom y descripción
 function mostrarProductos() {
