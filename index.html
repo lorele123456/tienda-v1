@@ -3,40 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pietra & Co. | Inventario Inteligente</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Montserrat:wght@200;400&display=swap" rel="stylesheet">
+    <title>Pietra & Co. | Catálogo de Lujo</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header>
-        <div class="logo-text">
-            <h1>PIETRA & CO.</h1>
-            <span>MINIMALISMO ARTESANAL</span>
-        </div>
-    </header>
-
     <nav>
-        <div class="filters">
-            <a onclick="renderizarGaleria('todos')">Colección</a>
-            <a onclick="renderizarGaleria('joyeros')">Joyeros</a>
-            <a onclick="renderizarGaleria('portavelas')">Velas</a>
+        <div class="logo">PIETRA & CO.</div>
+        <div class="nav-links">
+            <a href="#productos">Colección</a>
+            <a href="#nosotros">Nosotros</a>
+            <button class="cart-btn" onclick="toggleCart()">
+                SELECCIÓN (<span id="cart-count">0</span>)
+            </button>
         </div>
-        <a onclick="toggleCart(true)" class="cart-btn">Mi Selección (<span id="cart-count">0</span>)</a>
     </nav>
 
-    <div class="container">
-        <div class="grid" id="product-list">
-            </div>
-    </div>
+    <header class="hero">
+        <h1>Handcrafted Luxury</h1>
+        <p>Piezas únicas que elevan tus espacios</p>
+    </header>
 
-    <div id="cart-drawer">
-        <h2 style="font-family:'Cormorant Garamond'; margin-bottom:2rem;">Selección Boutique</h2>
-        <div id="cart-items"></div>
-        <div class="cart-footer" style="margin-top:2rem; border-top:1px solid #eee; padding-top:1.5rem;">
-            <p style="display:flex; justify-content:space-between; font-weight:bold;">TOTAL <span>S/ <span id="cart-total">0.00</span></span></p>
-            <button class="btn-order" style="background:#25D366;" onclick="enviarAWhatsApp()">PEDIR POR WHATSAPP</button>
-            <button onclick="toggleCart(false)" style="display:block; width:100%; margin-top:1.5rem; background:none; border:none; cursor:pointer; color:#999; font-size:0.7rem; letter-spacing:2px;">CERRAR</button>
+    <main class="container" id="productos">
+        <h2 class="section-title">Nuestra Colección</h2>
+        <div id="product-list">
+            </div>
+    </main>
+
+    <section class="nosotros" id="nosotros">
+        <h2>La Marca</h2>
+        <p>En Pietra & Co. fusionamos la sobriedad del mármol con el diseño contemporáneo. Cada pieza es una obra de arte funcional, creada para perdurar.</p>
+    </section>
+
+    <div id="cart-drawer" class="cart-drawer">
+        <div class="cart-header">
+            <h3>Tu Selección</h3>
+            <span class="close-cart" onclick="toggleCart()">✕</span>
+        </div>
+
+        <div id="cart-items" class="cart-items"></div>
+
+        <div class="cart-footer">
+            <div class="price-row">
+                <span>Subtotal</span>
+                <span>S/ <span id="subtotal">0.00</span></span>
+            </div>
+            <div class="price-row">
+                <span>Envío (Lima)</span>
+                <span>S/ 12.00</span>
+            </div>
+            <div class="price-row total">
+                <span>TOTAL</span>
+                <span>S/ <span id="total-final">0.00</span></span>
+            </div>
+            <button class="btn-whatsapp" onclick="enviarWhatsApp()">
+                PEDIR POR WHATSAPP
+            </button>
         </div>
     </div>
 
