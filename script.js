@@ -26,6 +26,7 @@ async function obtenerDatos() {
             // URL Directa para visualización
             const imgFinal = imgId ? `https://lh3.googleusercontent.com/d/${imgId}` : "https://via.placeholder.com/400x500?text=PIETRA";
 
+
             return {
     id: c[0], 
     nombre: c[1], 
@@ -34,7 +35,7 @@ async function obtenerDatos() {
     imagen: imgId ? `https://lh3.googleusercontent.com/d/${imgId}` : "https://via.placeholder.com/400",
     categoria: c[5] || 'Otros' // Esto le dice al código: "Toma lo que hay en la Columna F"
 };
-            };
+            
         }).filter(p => p.nombre);
 
         renderizarGaleria();
