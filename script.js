@@ -135,20 +135,51 @@ async function cargarDatos() {
     } catch (e) { console.error("Error", e); }
 }
 
-// Nueva función para filtrar por categoría
+// 1. Función para filtrar (Corregida)
 function filtrar(cat) {
-    // Estilo visual de los botones
+    // Esto quita la clase 'active' de todos los botones y se la pone al que clickeaste
     const botones = document.querySelectorAll('.filter-btn');
     botones.forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+    
+    // Usamos event.currentTarget para asegurar que capturemos el botón
+    if(event) event.currentTarget.classList.add('active');
 
-    // Filtrado de la lista
     if (cat === 'todos') {
         renderizar(inventarioCompleto);
     } else {
-        const filtrados = inventarioCompleto.filter(p => p.categoria.toLowerCase() === cat.toLowerCase());
+        // Filtramos comparando el texto de la columna F (c[5]) con la categoría elegida
+        const filtrados = inventarioCompleto.filter(p => 
+            p.categoria.trim().toLowerCase() === cat.trim().toLowerCase()
+        );
         renderizar(filtrados);
     }
+}
+
+// 2. Función para renderizar (Asegúrate de que limpie el contenedor)
+function renderizar(lista) {
+    const contenedor = document.getElementById('product-list');
+    
+    // IMPORTANTE: Esta línea borra los productos anteriores antes de poner los nuevos
+    contenedor.innerHTML = ''; 
+
+    if(lista.length === 0) {
+        contenedor.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding: 50px; color: #999;">Próximamente más piezas en esta categoría.</p>';
+        return;
+    }
+
+    lista.forEach(p => {
+        contenedor.innerHTML += `
+            <div class="product-card">
+                <div class="img-container">
+                    <img src="${p.imagen}" alt="${p.nombre}">
+                </div>
+                <h3>${p.nombre}</h3>
+                <p style="color:var(--oro); font-weight:600">S/ ${p.precio.toFixed(2)}</p>
+                <span class="desc-toggle" onclick="this.nextElementSibling.classList.toggle('show')">▼ Ver Detalles</span>
+                <div class="desc-text">${p.descripcion}</div>
+                <button class="btn-add" onclick="agregar('${p.id}')">Añadir</button>
+            </div>`;
+    });
 }
 // 4. FUNCIONES DE INTERFAZ
 function toggleCart(open = null) {
