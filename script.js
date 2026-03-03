@@ -136,21 +136,31 @@ async function cargarDatos() {
 }
 
 // 1. Función para filtrar (Corregida)
-function filtrar(cat) {
-    // Esto quita la clase 'active' de todos los botones y se la pone al que clickeaste
+function filtrar(catRecibida) {
+    console.log("Categoría clickeada en botón:", catRecibida);
+
+    // 1. Manejo visual de los botones
     const botones = document.querySelectorAll('.filter-btn');
     botones.forEach(b => b.classList.remove('active'));
     
-    // Usamos event.currentTarget para asegurar que capturemos el botón
-    if(event) event.currentTarget.classList.add('active');
+    // Si el evento existe, activamos el botón presionado
+    if (event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+    }
 
-    if (cat === 'todos') {
+    // 2. Normalizamos la categoría para la búsqueda (todo a minúsculas)
+    const catBusqueda = catRecibida.trim().toLowerCase();
+
+    if (catBusqueda === 'todos') {
         renderizar(inventarioCompleto);
     } else {
-        // Filtramos comparando el texto de la columna F (c[5]) con la categoría elegida
-        const filtrados = inventarioCompleto.filter(p => 
-            p.categoria.trim().toLowerCase() === cat.trim().toLowerCase()
-        );
+        // Filtramos comparando minúsculas contra minúsculas
+        const filtrados = inventarioCompleto.filter(p => {
+            const categoriaProducto = p.categoria.trim().toLowerCase();
+            return categoriaProducto === catBusqueda;
+        });
+        
+        console.log("Productos encontrados para " + catBusqueda + ":", filtrados.length);
         renderizar(filtrados);
     }
 }
