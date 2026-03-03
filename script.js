@@ -1,21 +1,26 @@
-// CONFIGURACIÓN GLOBAL
 const SHEET_ID = '1BoWQQk73dRJdH3NTHautP-aixEbDr3uRWgXfmlbUP20';
 const NUMERO_WA = "51987173565";
 const COSTO_ENVIO = 12.00; 
 
-let inventarioCompleto = []; // Usaremos solo esta para evitar confusiones
+let inventarioCompleto = []; 
 let carrito = [];
 
-// 1. CARGAR DATOS DEL EXCEL
 async function obtenerDatos() {
+    // Agregamos un número aleatorio al final para que siempre traiga datos nuevos del Excel
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&cachebuster=${Date.now()}`;
+    
     try {
         const respuesta = await fetch(url);
         const csv = await respuesta.text();
+        
+        // Detectar si el Excel usa comas o punto y coma
+        const separador = csv.includes('","') ? ',' : (csv.includes('";"') ? ';' : ',');
+        
         const filas = csv.split(/\r?\n/).slice(1); 
 
         inventarioCompleto = filas.map(f => {
-            const c = f.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/^"|"$/g, '').trim());
+            // Dividir columnas de forma segura
+            const c = f.split(separador).map(x => x.replace(/^"|"$/g, '').trim());
             
             let imgId = "";
             let linkOriginal = c[4] || "";
@@ -30,44 +35,44 @@ async function obtenerDatos() {
                 precio: parseFloat(c[2]) || 0,
                 descripcion: c[3] || '', 
                 imagen: imgFinal,
-                categoria: (c[5] || 'Otros').trim().toLowerCase() 
+                categoria: (c[5] || 'Otros').toLowerCase() // Convertimos a minúsculas aquí
             };
         }).filter(p => p.nombre);
 
-        renderizar(inventarioCompleto); // Mostramos todos al inicio
+        console.log("Inventario cargado:", inventarioCompleto); // Ver en consola
+        renderizar(inventarioCompleto);
     } catch (e) {
-        console.error("Error al cargar inventario", e);
+        console.error("Error crítico:", e);
     }
 }
 
-// 2. FUNCIÓN PARA FILTRAR
 function filtrar(catRecibida) {
-    console.log("Filtrando por:", catRecibida);
-
     const botones = document.querySelectorAll('.filter-btn');
     botones.forEach(b => b.classList.remove('active'));
     
+    // Marcamos el botón actual
     if (event && event.currentTarget) {
         event.currentTarget.classList.add('active');
     }
 
-    const catBusqueda = catRecibida.trim().toLowerCase();
+    const catBusqueda = catRecibida.toLowerCase().trim();
+    console.log("Filtrando por:", catBusqueda);
 
     if (catBusqueda === 'todos') {
         renderizar(inventarioCompleto);
     } else {
         const filtrados = inventarioCompleto.filter(p => p.categoria === catBusqueda);
+        console.log("Encontrados:", filtrados.length);
         renderizar(filtrados);
     }
 }
 
-// 3. FUNCIÓN PARA RENDERIZAR
 function renderizar(lista) {
     const contenedor = document.getElementById('product-list');
     contenedor.innerHTML = ''; 
 
     if(lista.length === 0) {
-        contenedor.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding: 50px; color: #999;">Próximamente más piezas en esta categoría.</p>';
+        contenedor.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding: 50px;">No hay productos en esta categoría todavía.</p>';
         return;
     }
 
@@ -75,10 +80,10 @@ function renderizar(lista) {
         contenedor.innerHTML += `
             <div class="product-card">
                 <div class="img-container">
-                    <img src="${p.imagen}" alt="${p.nombre}">
+                    <img src="${p.imagen}" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/400x500?text=Imagen+No+Disponible'">
                 </div>
                 <h3>${p.nombre}</h3>
-                <p style="color:var(--oro); font-weight:600">S/ ${p.precio.toFixed(2)}</p>
+                <p class="price">S/ ${p.precio.toFixed(2)}</p>
                 <span class="desc-toggle" onclick="toggleDetalles(this)">▼ Detalles</span>
                 <div class="desc-text">${p.descripcion}</div>
                 <button class="btn-add" onclick="agregarCarrito('${p.id}')">Añadir a Selección</button>
@@ -86,14 +91,10 @@ function renderizar(lista) {
     });
 }
 
-// 4. LÓGICA DEL CARRITO
+// --- RESTO DE FUNCIONES (CARRITO Y WA) ---
 function agregarCarrito(id) {
     const p = inventarioCompleto.find(item => item.id === id);
-    if (p) {
-        carrito.push(p);
-        actualizarUI();
-        toggleCart(true);
-    }
+    if (p) { carrito.push(p); actualizarUI(); toggleCart(true); }
 }
 
 function quitarCarrito(index) {
@@ -106,20 +107,12 @@ function actualizarUI() {
     const subHtml = document.getElementById('subtotal');
     const totHtml = document.getElementById('total-final');
     const countHtml = document.getElementById('cart-count');
-    
     listaHtml.innerHTML = '';
     let sub = 0;
-
     carrito.forEach((p, i) => {
         sub += p.precio;
-        listaHtml.innerHTML += `
-            <div class="cart-item">
-                <span>${p.nombre}</span>
-                <span>S/ ${p.precio.toFixed(2)} <button onclick="quitarCarrito(${i})" style="color:red; border:none; background:none; cursor:pointer; margin-left:8px;">✕</button></span>
-            </div>
-        `;
+        listaHtml.innerHTML += `<div class="cart-item"><span>${p.nombre}</span><span>S/ ${p.precio.toFixed(2)} <button onclick="quitarCarrito(${i})" style="color:red; border:none; background:none; cursor:pointer;">✕</button></span></div>`;
     });
-
     const final = sub > 0 ? sub + COSTO_ENVIO : 0;
     subHtml.innerText = sub.toFixed(2);
     totHtml.innerText = final.toFixed(2);
@@ -143,10 +136,8 @@ function enviarWhatsApp() {
     if (carrito.length === 0) return alert("Tu selección está vacía");
     let mensaje = `*PEDIDO PIETRA & CO.*\n\n`;
     carrito.forEach(p => mensaje += `• ${p.nombre} (S/ ${p.precio.toFixed(2)})\n`);
-    const tot = document.getElementById('total-final').innerText;
-    mensaje += `\n*Envío Lima:* S/ ${COSTO_ENVIO.toFixed(2)}\n*TOTAL A PAGAR:* S/ ${tot}`;
+    mensaje += `\n*Envío Lima:* S/ ${COSTO_ENVIO.toFixed(2)}\n*TOTAL:* S/ ${document.getElementById('total-final').innerText}`;
     window.open(`https://wa.me/${NUMERO_WA}?text=${encodeURIComponent(mensaje)}`, '_blank');
 }
 
-// INICIAR ÚNICA FUNCIÓN
 obtenerDatos();
