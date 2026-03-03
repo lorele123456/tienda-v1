@@ -105,6 +105,48 @@ function actualizarUI() {
     countHtml.innerText = carrito.length;
 }
 
+// Asegúrate de que el map incluya la columna F (índice 5)
+async function cargarDatos() {
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+    try {
+        const res = await fetch(url);
+        const data = await res.text();
+        const filas = data.split(/\r?\n/).slice(1);
+        
+        inventarioCompleto = filas.map(f => {
+            const c = f.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/^"|"$/g, '').trim());
+            let imgId = "";
+            if(c[4] && c[4].includes('/d/')) imgId = c[4].split('/d/')[1].split('/')[0];
+            
+            return {
+                id: c[0], 
+                nombre: c[1], 
+                precio: parseFloat(c[2]) || 0,
+                descripcion: c[3] || '', 
+                imagen: imgId ? `https://lh3.googleusercontent.com/d/${imgId}` : "https://via.placeholder.com/400",
+                categoria: c[5] || 'Otros' // <--- Lee la columna F del Excel
+            };
+        }).filter(p => p.nombre);
+
+        renderizar(inventarioCompleto);
+    } catch (e) { console.error("Error", e); }
+}
+
+// Nueva función para filtrar por categoría
+function filtrar(cat) {
+    // Estilo visual de los botones
+    const botones = document.querySelectorAll('.filter-btn');
+    botones.forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+
+    // Filtrado de la lista
+    if (cat === 'todos') {
+        renderizar(inventarioCompleto);
+    } else {
+        const filtrados = inventarioCompleto.filter(p => p.categoria.toLowerCase() === cat.toLowerCase());
+        renderizar(filtrados);
+    }
+}
 // 4. FUNCIONES DE INTERFAZ
 function toggleCart(open = null) {
     const cart = document.getElementById('cart-drawer');
