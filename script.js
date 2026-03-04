@@ -29,14 +29,15 @@ async function obtenerDatos() {
             
             const imgFinal = imgId ? `https://lh3.googleusercontent.com/d/${imgId}` : "https://via.placeholder.com/400x500?text=PIETRA";
 
-            return {
-                id: c[0], 
-                nombre: c[1], 
-                precio: parseFloat(c[2]) || 0,
-                descripcion: c[3] || '', 
-                imagen: imgFinal,
-                categoria: (c[5] || 'Otros').toLowerCase() // Convertimos a minúsculas aquí
-            };
+           return {
+    id: c[0], 
+    nombre: c[1], 
+    precio: parseFloat(c[2]) || 0,
+    descripcion: c[3] || '', 
+    imagen: imgFinal,
+    categoria: (c[5] || 'Otros').trim().toLowerCase(),
+    precioAnterior: parseFloat(c[6]) || null // <--- Lee la columna G
+};
         }).filter(p => p.nombre);
 
         console.log("Inventario cargado:", inventarioCompleto); // Ver en consola
@@ -71,26 +72,39 @@ function renderizar(lista) {
     const contenedor = document.getElementById('product-list');
     contenedor.innerHTML = ''; 
 
-    if(lista.length === 0) {
-        contenedor.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding: 50px;">No hay productos en esta categoría todavía.</p>';
-        return;
-    }
-
     lista.forEach(p => {
+        let preciosHTML = `<span class="current-price">S/ ${p.precio.toFixed(2)}</span>`;
+        let etiquetaOferta = "";
+
+        // Si existe un precio anterior mayor al actual, mostramos la oferta
+        if (p.precioAnterior && p.precioAnterior > p.precio) {
+            const porcentaje = Math.round(((p.precioAnterior - p.precio) / p.precioAnterior) * 100);
+            etiquetaOferta = `<span class="badge-discount">-${porcentaje}%</span>`;
+            preciosHTML = `
+                <span class="current-price">S/ ${p.precio.toFixed(2)}</span>
+                <span class="badge-discount">-${porcentaje}%</span>
+                <div class="old-price">S/ ${p.precioAnterior.toFixed(2)}</div>
+            `;
+        }
+
         contenedor.innerHTML += `
             <div class="product-card">
                 <div class="img-container">
-                    <img src="${p.imagen}" alt="${p.nombre}" onerror="this.src='https://via.placeholder.com/400x500?text=Imagen+No+Disponible'">
+                    <img src="${p.imagen}" alt="${p.nombre}">
                 </div>
-                <h3>${p.nombre}</h3>
-                <p class="price">S/ ${p.precio.toFixed(2)}</p>
-                <span class="desc-toggle" onclick="toggleDetalles(this)">▼ Detalles</span>
-                <div class="desc-text">${p.descripcion}</div>
-                <button class="btn-add" onclick="agregarCarrito('${p.id}')">Añadir a Selección</button>
+                <div class="product-info">
+                    <span class="brand-label">PIETRA & CO.</span>
+                    <h3>${p.nombre}</h3>
+                    <div class="price-row">
+                        ${preciosHTML}
+                    </div>
+                    <span class="desc-toggle" onclick="toggleDetalles(this)">▼ Detalles</span>
+                    <div class="desc-text">${p.descripcion}</div>
+                    <button class="btn-add" onclick="agregarCarrito('${p.id}')">Añadir a Selección</button>
+                </div>
             </div>`;
     });
 }
-
 // --- RESTO DE FUNCIONES (CARRITO Y WA) ---
 function agregarCarrito(id) {
     const p = inventarioCompleto.find(item => item.id === id);

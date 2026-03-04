@@ -192,3 +192,59 @@ nav {
     .cart-drawer { width: 100%; }
     .hero h1 { font-size: 2.2rem; }
 }
+
+/* Contenedor de información del producto */
+.product-info {
+    padding: 15px;
+    text-align: left;
+}
+
+.brand-label {
+    font-size: 0.7rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.product-card h3 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: var(--verde);
+}
+
+/* Precios y Ofertas */
+.price-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.current-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.old-price {
+    font-size: 0.9rem;
+    color: #999;
+    text-decoration: line-through;
+}
+
+/* Etiqueta Roja (Badge) */
+.badge-discount {
+    background-color: #e60023; /* Rojo de la imagen */
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Ajuste de la imagen para que la etiqueta flote */
+.img-container {
+    position: relative;
+}
