@@ -117,7 +117,7 @@ function renderizar(lista) {
                     <img src="${p.imagen}" alt="${p.nombre}" loading="lazy">
                 </div>
                 <div class="product-info">
-                    <span class="brand-label">PIETRA & CO.</span>
+                    
                     <h3>${p.nombre}</h3>
                     <div class="price-row">
                         ${preciosHTML}
