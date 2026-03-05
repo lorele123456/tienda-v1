@@ -1,92 +1,205 @@
 <!DOCTYPE html>
+
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Pietra & Co. | Luxury Decor</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 <body>
 
+
+
     <nav>
+
         <div class="logo">PIETRA & CO.</div>
+
         <div class="nav-links">
+
             <a href="#productos">Colección</a>
+
             <a href="#nosotros">Nosotros</a>
-            
-            <div class="search-box">
-                <input type="text" id="busqueda" placeholder="Buscar..." onkeyup="buscar()">
+
+
+
+                       <div class="cart-icon" onclick="toggleCart()">
+
+                <span>🛒</span>
+
+                <span id="cart-count">0</span>
+
             </div>
 
-            <div class="cart-icon" onclick="toggleCart()">
-                <span>🛒</span>
-                <span id="cart-count">0</span>
-            </div>
+
+
+   
+
         </div>
+
+
+
+   
+
+   
+
     </nav>
 
-    <header class="hero">
-        <h1>Minimalismo Artesanal</h1>
+     
+
+   
+
+</div>
+
+
+
+   <header class="hero">
+
+        <h1>prueba01 Minimalismo Artesanal</h1>
+
         <p>Diseño sostenible en ecoresina jasmonite para espacios exclusivos.</p>
+
     </header>
 
-    <div class="filter-bar">
-        <button class="filter-btn active" onclick="filtrar('todos')">Todos</button>
-        <button class="filter-btn" onclick="filtrar('jarrones')">Jarrones</button>
-        <button class="filter-btn" onclick="filtrar('portavelas')">Portavelas</button>
-        <button class="filter-btn" onclick="filtrar('bandejas')">Bandejas</button>
-        <button class="filter-btn" onclick="filtrar('joyeros')">Joyeros</button>
-        <button class="filter-btn" onclick="filtrar('ceniceros')">Ceniceros</button>
-    </div>
+<div class="filter-bar">
+
+    <button class="filter-btn active" onclick="filtrar('todos')">Todos</button>
+
+    <button class="filter-btn" onclick="filtrar('jarrones')">Jarrones</button>
+
+    <button class="filter-btn" onclick="filtrar('portavelas')">Portavelas</button>
+
+    <button class="filter-btn" onclick="filtrar('bandejas')">Bandejas</button>
+
+    <button class="filter-btn" onclick="filtrar('joyeros')">Joyeros</button>
+
+    <button class="filter-btn" onclick="filtrar('ceniceros')">Ceniceros</button>
+
+</div>
+
+
 
     <main class="container" id="productos">
+
         <div id="product-list" class="product-grid">
+
             </div>
+
     </main>
 
-    <section class="nosotros-container" id="nosotros">
-        <div class="nosotros-content">
-            <span class="nosotros-subtitle">Nuestra Esencia</span>
-            <h2>La Belleza de lo Consciente</h2>
-            <p>
-                En <strong>Pietra & Co.</strong>, creemos que el lujo reside en la simplicidad y el respeto por el entorno. 
-                Nuestras piezas nacen del <strong>Minimalismo Artesanal</strong>, fusionando diseño contemporáneo con materiales de nueva generación.
-            </p>
-            <p>
-                Trabajamos exclusivamente con <strong>ecoresina jasmonite</strong>, un material compuesto, libre de solventes y amigable con el planeta.
-            </p>
-            <div class="nosotros-features">
-                <div class="feature">
-                    <strong>Eco-Friendly</strong>
-                    <span>Materiales libres de VOC</span>
-                </div>
-                <div class="feature">
-                    <strong>Hecho a Mano</strong>
-                    <span>Piezas únicas en Lima</span>
-                </div>
-                <div class="feature">
-                    <strong>Durabilidad</strong>
-                    <span>Resistencia y elegancia</span>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <div id="cart-drawer" class="cart-drawer">
-        <div class="cart-header">
-            <h3>Tu Selección</h3>
-            <button class="close-btn" onclick="toggleCart()">✕</button>
+
+   
+
+    <main class="container" id="productos">
+
+        <div id="product-list" class="product-grid">
+
+            </div>
+
+    </main>
+
+
+
+    <section class="nosotros-container" id="nosotros">
+
+    <div class="nosotros-content">
+
+        <span class="nosotros-subtitle">Nuestra Esencia</span>
+
+        <h2>La Belleza de lo Consciente</h2>
+
+        <p>
+
+            En <strong>Pietra & Co.</strong>, creemos que el lujo reside en la simplicidad y el respeto por el entorno.
+
+            Nuestras piezas nacen del <strong>Minimalismo Artesanal</strong>, fusionando diseño contemporáneo con materiales de nueva generación.
+
+        </p>
+
+        <p>
+
+            Trabajamos exclusivamente con <strong>ecoresina</strong>, un material compuesto, libre de solventes y amigable con el planeta,
+
+            que nos permite crear texturas satinadas y colores orgánicos imposibles de replicar industrialmente.
+
+        </p>
+
+        <div class="nosotros-features">
+
+            <div class="feature">
+
+                <strong>Eco-Friendly</strong>
+
+                <span>Materiales libres de VOC</span>
+
+            </div>
+
+            <div class="feature">
+
+                <strong>Hecho a Mano</strong>
+
+                <span>Piezas únicas en Lima</span>
+
+            </div>
+
+            <div class="feature">
+
+                <strong>Durabilidad</strong>
+
+                <span>Resistencia y elegancia</span>
+
+            </div>
+
         </div>
-        <div id="cart-items" class="cart-body"></div>
-        <div class="cart-footer">
-            <div class="row"><span>Subtotal:</span><span>S/ <span id="subtotal">0.00</span></span></div>
-            <div class="row"><span>Envío Lima:</span><span>S/ 12.00</span></div>
-            <div class="row total"><span>Total:</span><span>S/ <span id="total-final">0.00</span></span></div>
-            <button class="btn-whatsapp" onclick="enviarWhatsApp()">PEDIR POR WHATSAPP</button>
-        </div>
+
     </div>
 
+</section>
+
+
+
+    <div id="cart-drawer" class="cart-drawer">
+
+        <div class="cart-header">
+
+            <h3>Tu Selección</h3>
+
+            <button class="close-btn" onclick="toggleCart()">✕</button>
+
+        </div>
+
+        <div id="cart-items" class="cart-body">
+
+            </div>
+
+        <div class="cart-footer">
+
+            <div class="row"><span>Subtotal:</span><span>S/ <span id="subtotal">0.00</span></span></div>
+
+            <div class="row"><span>Envío Lima:</span><span>S/ 12.00</span></div>
+
+            <div class="row total"><span>Total:</span><span>S/ <span id="total-final">0.00</span></span></div>
+
+            <button class="btn-whatsapp" onclick="enviarWhatsApp()">PEDIR POR WHATSAPP</button>
+
+        </div>
+
+    </div>
+
+
+
     <script src="script.js"></script>
+
 </body>
+
 </html>
