@@ -12,20 +12,24 @@ async function obtenerDatos() {
         const respuesta = await fetch(url);
         const csv = await respuesta.text();
         
-        // Detectar si el Excel usa comas o punto y coma
-        const separador = csv.includes('","') ? ',' : (csv.includes('";"') ? ';' : ',');
+        // Separador avanzado que ignora comas dentro de comillas
         const filas = csv.split(/\r?\n/).slice(1); 
 
-        inventarioCompleto = filas.map(f => {
-            const c = f.split(separador).map(x => x.replace(/^"|"$/g, '').trim());
+        inventarioCompleto = filas.map((f, index) => {
+            // Este regex es vital para que no se mueva de columna si hay comas en la descripción
+            const c = f.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/^"|"$/g, '').trim());
             
+            if (c.length < 2) return null;
+
             let imgId = "";
             let linkOriginal = c[4] || "";
             if (linkOriginal.includes('/d/')) imgId = linkOriginal.split('/d/')[1].split('/')[0];
             else if (linkOriginal.includes('id=')) imgId = linkOriginal.split('id=')[1].split('&')[0];
             
-            // CORRECCIÓN: Enlace directo corregido para Google Drive
             const imgFinal = imgId ? `https://lh3.googleusercontent.com/d/${imgId}` : "https://via.placeholder.com/400x500?text=PIETRA";
+
+            // LOG DE DEPURACIÓN: Verás esto en la consola (F12)
+            console.log(`Fila ${index + 1} - Columna G raw:`, c[6]);
 
             return {
                 id: c[0], 
@@ -34,17 +38,17 @@ async function obtenerDatos() {
                 descripcion: c[3] || '', 
                 imagen: imgFinal,
                 categoria: (c[5] || 'Otros').trim().toLowerCase(),
-                precioAnterior: c[6] ? parseFloat(c[6]) : null 
+                // FORZAMOS LA CONVERSIÓN: Si c[6] existe, lo limpia de símbolos y lo vuelve número
+                precioAnterior: (c[6] && c[6] !== "") ? parseFloat(c[6].replace(/[^0-9.]/g, '')) : null 
             };
-        }).filter(p => p.nombre);
+        }).filter(p => p !== null && p.nombre);
 
-        console.log("Inventario cargado:", inventarioCompleto);
+        console.table(inventarioCompleto); // Esto te mostrará una tabla linda en la consola con los datos
         renderizar(inventarioCompleto);
     } catch (e) {
-        console.error("Error crítico:", e);
+        console.error("Error cargando info:", e);
     }
 }
-
 // NUEVA FUNCIÓN: Buscador de Header
 function buscar() {
     const texto = document.getElementById('busqueda').value.toLowerCase().trim();
