@@ -14,18 +14,19 @@ async function obtenerDatos() {
         const filas = csv.split(/\r?\n/).slice(1);
 
         inventarioCompleto = filas.map(f => {
+            // Regex para manejar comas dentro de las celdas del Excel
             const c = f.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/^"|"$/g, '').trim());
             return {
                 id: c[0],
                 nombre: c[1],
                 precio: parseFloat(c[2]) || 0,
-                imagen: c[4] || "https://placehold.co/400x500",
+                imagen: c[4] || "https://placehold.co/400x500?text=PIETRA",
                 categoria: (c[5] || 'todos').toLowerCase()
             };
         }).filter(p => p.nombre);
 
         renderizar(inventarioCompleto);
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error("Error cargando datos:", e); }
 }
 
 function renderizar(lista) {
@@ -41,12 +42,13 @@ function renderizar(lista) {
                     <div class="fav-btn-item ${esFav ? 'active' : ''}" onclick="toggleFavorito('${p.id}')">
                         ${esFav ? '❤️' : '♡'}
                     </div>
-                    <img src="${p.imagen}" alt="${p.nombre}">
+                    <img src="${p.imagen}" alt="${p.nombre}" onerror="this.src='https://placehold.co/400x500?text=Imagen+No+Disponible'">
                 </div>
-                <div class="product-info" style="padding:10px 0;">
-                    <h3 style="font-size:1rem;">${p.nombre}</h3>
-                    <p style="color:var(--oro); font-weight:600;">S/ ${p.precio.toFixed(2)}</p>
-                    <button class="btn-add" onclick="agregarCarrito('${p.id}')" style="width:100%; margin-top:10px; background:var(--verde); color:white; border:none; padding:8px; cursor:pointer;">Añadir</button>
+                <div class="product-info" style="padding:15px 0;">
+                    <span style="font-size:0.6rem; color:var(--oro); letter-spacing:1px; text-transform:uppercase;">Pietra - Minimalismo Artesanal</span>
+                    <h3 style="font-size:1.1rem; margin: 5px 0; font-family:'Playfair Display';">${p.nombre}</h3>
+                    <p style="color:var(--verde); font-weight:600;">S/ ${p.precio.toFixed(2)}</p>
+                    <button class="btn-add" onclick="agregarCarrito('${p.id}')" style="width:100%; margin-top:10px; background:var(--verde); color:white; border:none; padding:12px; cursor:pointer; text-transform:uppercase; font-size:0.7rem; letter-spacing:1px;">Añadir</button>
                 </div>
             </div>`;
     });
@@ -75,6 +77,11 @@ function agregarCarrito(id) {
     }
 }
 
+function quitarDelCarrito(index) {
+    carrito.splice(index, 1);
+    actualizarUI();
+}
+
 function actualizarUI() {
     const listaHtml = document.getElementById('cart-items');
     let sub = 0;
@@ -82,14 +89,18 @@ function actualizarUI() {
     carrito.forEach((p, i) => {
         sub += p.precio;
         listaHtml.innerHTML += `
-            <div class="cart-item">
-                <img src="${p.imagen}">
-                <div><p>${p.nombre}</p><p>S/ ${p.precio.toFixed(2)}</p></div>
-                <button onclick="carrito.splice(${i},1); actualizarUI();" style="background:none; border:none; cursor:pointer;">✕</button>
+            <div class="cart-item" style="display:flex; gap:10px; margin-bottom:10px; align-items:center;">
+                <img src="${p.imagen}" style="width:50px; height:50px; object-fit:cover; border-radius:4px;">
+                <div style="flex:1;">
+                    <p style="font-size:0.8rem; font-weight:600; margin:0;">${p.nombre}</p>
+                    <p style="font-size:0.75rem; color:var(--oro); margin:0;">S/ ${p.precio.toFixed(2)}</p>
+                </div>
+                <button onclick="quitarDelCarrito(${i})" style="background:none; border:none; cursor:pointer; color:#ccc;">✕</button>
             </div>`;
     });
+    const total = sub > 0 ? sub + COSTO_ENVIO : 0;
     document.getElementById('subtotal').innerText = sub.toFixed(2);
-    document.getElementById('total-final').innerText = (sub + (sub > 0 ? COSTO_ENVIO : 0)).toFixed(2);
+    document.getElementById('total-final').innerText = total.toFixed(2);
     document.getElementById('cart-count').innerText = carrito.length;
 }
 
@@ -100,9 +111,10 @@ function toggleCart(force) {
 }
 
 function enviarWhatsApp() {
+    if (carrito.length === 0) return alert("Selecciona un producto");
     let mensaje = `*PEDIDO PIETRA*\n\n`;
     carrito.forEach(p => mensaje += `• ${p.nombre} (S/ ${p.precio.toFixed(2)})\n`);
-    mensaje += `\n*TOTAL:* S/ ${document.getElementById('total-final').innerText}`;
+    mensaje += `\n*Envío Lima:* S/ ${COSTO_ENVIO.toFixed(2)}\n*TOTAL:* S/ ${document.getElementById('total-final').innerText}`;
     window.open(`https://wa.me/${NUMERO_WA}?text=${encodeURIComponent(mensaje)}`);
 }
 

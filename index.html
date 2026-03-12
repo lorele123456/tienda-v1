@@ -51,31 +51,22 @@
     </div>
 
     <header class="hero">
-        <h1>u-Minimalismo Artesanal</h1>
+        <h1>r1- Minimalismo Artesanal</h1>
         <p>Ecoresina y Diseño Sostenible</p>
     </header>
 
-    <section class="banner-carousel">
-        <div class="carousel-track" id="banner-track"></div>
-    </section>
-
-    <div class="filter-bar">
-        <button class="filter-btn active" onclick="filtrar('todos')">Todos</button>
-        <button class="filter-btn" onclick="filtrar('jarrones')">Jarrones</button>
-        <button class="filter-btn" onclick="filtrar('portavelas')">Portavelas</button>
-        <button class="filter-btn" onclick="filtrar('bandejas')">Bandejas</button>
-    </div>
-
     <main class="container">
-        <div id="product-list" class="product-grid"></div>
+        <div id="product-list" class="product-grid">
+            </div>
     </main>
 
     <div id="cart-drawer" class="cart-drawer">
         <div class="cart-header">
             <h3>Tu Selección</h3>
-            <button onclick="toggleCart()">✕</button>
+            <button class="close-btn" onclick="toggleCart()">✕</button>
         </div>
-        <div id="cart-items" class="cart-body"></div>
+        <div id="cart-items" class="cart-body">
+            </div>
         <div class="cart-footer">
             <div class="row"><span>Subtotal:</span><span>S/ <span id="subtotal">0.00</span></span></div>
             <div class="row"><span>Envío Lima:</span><span>S/ 12.00</span></div>
