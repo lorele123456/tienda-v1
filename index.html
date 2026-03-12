@@ -9,9 +9,12 @@
 </head>
 <body>
 
-    <nav class="navbar-luxury">
+   <nav class="navbar-luxury">
     <div class="nav-left">
-        <span class="menu-icon">☰</span>
+        <div class="menu-icon" onclick="toggleMenu()">
+            <span>☰</span>
+            <span class="menu-text">Menú</span>
+        </div>
     </div>
 
     <div class="nav-center">
@@ -19,16 +22,24 @@
     </div>
 
     <div class="nav-right">
-        <div class="nav-links">
-            <a href="#productos">Colección</a>
-            <a href="#nosotros">Nosotros</a>
-        </div>
-        <div class="cart-icon" onclick="toggleCart()">
-            <span class="icon-svg">🛒</span>
-            <span id="cart-count">0</span>
+        <div class="action-icons">
+            <span class="icon" title="Buscar">🔍</span>
+            <span class="icon" title="Mis Favoritos">♡</span>
+            <div class="cart-icon" onclick="toggleCart()" title="Mi Selección">
+                <span>🛒</span>
+                <span id="cart-count">0</span>
+            </div>
         </div>
     </div>
 </nav>
+
+<div id="side-menu" class="side-menu">
+    <button class="close-menu" onclick="toggleMenu()">✕</button>
+    <div class="menu-content">
+        <a href="#productos" onclick="toggleMenu()">Colección</a>
+        <a href="#nosotros" onclick="toggleMenu()">Nosotros</a>
+    </div>
+</div>
     <header class="hero">
         <h1>Minimalismo Artesanal</h1>
         <p>Diseño sostenible en ecoresina para espacios exclusivos.</p>

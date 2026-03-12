@@ -10,6 +10,11 @@ let inventarioCompleto = [];
 let carrito = [];
 let currentSlide = 0;
 
+function toggleMenu() {
+    const menu = document.getElementById('side-menu');
+    menu.classList.toggle('active');
+}
+
 /**
  * 2. CARGA DE DATOS (PRODUCTOS Y BANNERS)
  */
