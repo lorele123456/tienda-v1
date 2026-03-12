@@ -1,135 +1,102 @@
-/* 1. PALETA DE COLORES Y BASES */
+/* 1. BASES */
 :root {
-    --verde-oscuro: #1A3933; /* Color de cabecera */
-    --crema-fondo: #F5F5DC;  /* Color de fondo */
-    --oro-acento: #C5A059;   /* Color de acento */
+    --verde: #1A3933;
+    --crema: #F5F5DC;
+    --oro: #C5A059;
     --blanco: #ffffff;
     --rojo-oferta: #e60023;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Playfair+Display:ital,wght@0,400;1,700&family=Montserrat:wght@300;400;600&display=swap');
-
 * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
 
 body { 
-    background: var(--crema-fondo); 
-    color: var(--verde-oscuro); 
+    background: var(--crema); 
+    color: var(--verde); 
     font-family: 'Montserrat', sans-serif; 
     overflow-x: hidden;
-    scroll-behavior: smooth;
 }
 
-/* 2. NAVBAR LUXURY (AJUSTE DE ESQUINAS) */
+/* 2. NAVBAR LUXURY - LOGO CLAVADO AL CENTRO */
 .navbar-luxury {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr; /* Tres columnas para centrar el logo */
+    background: var(--verde);
+    height: 80px;
+    display: flex;
     align-items: center;
-    padding: 1.2rem 5%;
-    background: var(--verde-oscuro); /* Cabecera verde oscuro */
+    justify-content: space-between;
+    padding: 0 5%;
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
-/* Izquierda: Hamburguesa */
-.nav-left {
-    display: flex;
-    justify-content: flex-start;
-}
+.nav-left, .nav-right { z-index: 1002; }
 
-.menu-trigger {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--crema-fondo); /* Texto crema en cabecera */
-    cursor: pointer;
-}
-
-/* Centro: Nombre del Negocio */
 .logo-brand {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     font-family: 'Cormorant Garamond', serif;
     font-size: 2.2rem;
     letter-spacing: 8px;
-    color: var(--crema-fondo); /* Texto crema en cabecera */
+    color: var(--crema);
     text-transform: uppercase;
     font-weight: 300;
+    pointer-events: none;
     white-space: nowrap;
-    text-decoration: none; /* Sin subrayado */
 }
 
-/* Derecha: Iconos en la esquina */
-.nav-right {
-    display: flex;
-    justify-content: flex-end;
+.action-bar { display: flex; align-items: center; gap: 15px; }
+
+.menu-trigger { color: var(--crema); cursor: pointer; display: flex; align-items: center; gap: 8px; }
+
+.search-wrapper { display: flex; align-items: center; background: rgba(255, 255, 255, 0.1); padding: 5px 10px; border-radius: 20px; }
+#search-input { background: none; border: none; color: var(--crema); width: 0; transition: 0.3s; font-size: 0.8rem; }
+.search-wrapper:hover #search-input, #search-input:focus { width: 100px; }
+
+.action-icon { color: var(--crema); font-size: 1.2rem; }
+.favorite-wrapper, .cart-wrapper { position: relative; display: flex; align-items: center; cursor: pointer; }
+
+.notif-badge {
+    background: var(--oro); color: var(--verde); font-size: 0.6rem; font-weight: bold;
+    min-width: 15px; height: 15px; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; position: absolute; top: -8px; right: -8px;
 }
 
-.action-bar {
-    display: flex;
-    align-items: center;
-    gap: 18px; /* Espacio entre iconos */
+/* 3. PRODUCTOS */
+.product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; padding: 40px 5%; }
+.product-card { background: white; padding: 15px; position: relative; transition: 0.3s; }
+.img-container { width: 100%; height: 350px; overflow: hidden; position: relative; }
+.img-container img { width: 100%; height: 100%; object-fit: cover; }
+
+.fav-btn-item {
+    position: absolute; top: 10px; right: 10px; background: white; width: 35px; height: 35px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 1.1rem;
 }
+.fav-btn-item.active { color: var(--rojo-oferta); }
 
-/* Iconos de acción */
-.action-icon { color: var(--crema-fondo); font-size: 1.2rem; transition: 0.3s; }
-.action-icon:hover { color: var(--oro-acento); }
+/* HERO Y TEXTOS */
+.hero { text-align: center; padding: 60px 0; background: var(--crema); }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-style: italic; }
 
-/* 3. PRODUCTOS Y CORAZÓN SOBRE IMAGEN */
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Cuadrícula de 3 columnas */
-    gap: 30px;
-    padding: 40px 5%;
-}
+/* MENÚ Y CARRITO */
+.side-drawer { position: fixed; left: -100%; top: 0; width: 300px; height: 100%; background: var(--verde); z-index: 2000; transition: 0.4s; padding: 40px; }
+.side-drawer.active { left: 0; }
+.drawer-content a { color: var(--crema); text-decoration: none; display: block; font-size: 1.5rem; margin-bottom: 20px; font-family: 'Playfair Display'; }
 
-.product-card { 
-    background: white; 
-    padding: 15px; 
-    position: relative; 
-    transition: 0.3s;
-    border: 1px solid rgba(0,0,0,0.03);
-}
+.cart-drawer { position: fixed; right: -100%; top: 0; width: 350px; height: 100%; background: white; z-index: 2000; transition: 0.4s; padding: 25px; display: flex; flex-direction: column; }
+.cart-drawer.open { right: 0; }
+.cart-header { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+.cart-body { flex: 1; overflow-y: auto; }
+.cart-footer { padding-top: 20px; border-top: 1px solid #eee; }
+.row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; }
+.total { font-weight: bold; font-size: 1.1rem; margin-top: 10px; color: var(--verde); }
 
-.img-container { 
-    width: 100%; 
-    height: 380px; 
-    overflow: hidden; 
-    position: relative; 
-    margin-bottom: 15px;
-}
+.btn-whatsapp { background: #25D366; color: white; border: none; width: 100%; padding: 15px; cursor: pointer; font-weight: bold; border-radius: 4px; margin-top: 15px; }
 
-.img-container img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    transition: transform 0.6s ease;
-}
-
-.product-card:hover img { transform: scale(1.05); }
-
-/* Textos de producto */
-.brand-label { font-size: 0.65rem; color: var(--oro-acento); text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 5px; }
-.product-info h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--verde-oscuro); margin-bottom: 8px; }
-.current-price { font-weight: 600; color: var(--verde-oscuro); font-size: 1.1rem; }
-
-.btn-add {
-    background: var(--verde-oscuro); 
-    color: var(--crema-fondo); 
-    border: none;
-    width: 100%; padding: 12px; cursor: pointer;
-    text-transform: uppercase; font-weight: 600; letter-spacing: 2px;
-    font-size: 0.75rem; transition: 0.3s;
-    margin-top: 15px;
-}
-
-.btn-add:hover { background: var(--oro-acento); color: var(--verde-oscuro); }
-
-/* 4. RESPONSIVO */
-@media (max-width: 900px) {
-    .product-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 600px) {
-    .navbar-luxury { grid-template-columns: 1fr auto; padding: 1rem 3%; }
-    .logo-brand { font-size: 1.3rem; letter-spacing: 4px; }
-    .product-grid { grid-template-columns: 1fr; }
+@media (max-width: 900px) { .product-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { 
+    .product-grid { grid-template-columns: 1fr; } 
+    .logo-brand { font-size: 1.4rem; letter-spacing: 3px; }
+    .cart-drawer { width: 100%; }
 }

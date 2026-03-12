@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pietra & Co. | Luxury Decor</title>
+    <title>PIETRA | Minimalismo Artesanal</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Playfair+Display:ital,wght@0,400;1,700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -18,16 +18,22 @@
         </div>
 
         <div class="nav-center">
-            <a href="#" class="logo-brand">RPIETRA & CO.</a>
+            <span class="logo-brand">PIETRA</span>
         </div>
 
         <div class="nav-right">
             <div class="action-bar">
-                <span class="action-icon" title="Buscar">🔍</span>
-                <span class="action-icon" title="Favoritos">♡</span>
-                <div class="cart-wrapper" onclick="toggleCart()" title="Carrito">
+                <div class="search-wrapper">
+                    <input type="text" id="search-input" placeholder="Buscar..." onkeyup="ejecutarBusqueda()">
+                    <span class="action-icon">🔍</span>
+                </div>
+                <div class="favorite-wrapper">
+                    <span class="action-icon">♡</span>
+                    <span id="fav-count" class="notif-badge">0</span>
+                </div>
+                <div class="cart-wrapper" onclick="toggleCart()">
                     <span class="action-icon">🛒</span>
-                    <span id="cart-count">0</span>
+                    <span id="cart-count" class="notif-badge">0</span>
                 </div>
             </div>
         </div>
@@ -38,51 +44,21 @@
             <button class="close-drawer" onclick="toggleMenu()">✕</button>
         </div>
         <div class="drawer-content">
-            <a href="#productos" onclick="toggleMenu()">Colección</a>
-            <a href="#categorias" onclick="toggleMenu()">Categorías</a>
-            <a href="#nosotros" onclick="toggleMenu()">Nosotros</a>
+            <a href="index.html" onclick="toggleMenu()">Colección</a>
+            <a href="nosotros.html">Nosotros</a>
+            <a href="#contacto" onclick="toggleMenu()">Contacto</a>
         </div>
     </div>
 
     <header class="hero">
         <h1>Minimalismo Artesanal</h1>
-        <p>Diseño sostenible en ecoresina para espacios exclusivos.</p>
+        <p>Ecoresina y Diseño Sostenible</p>
     </header>
 
-    <section class="banner-carousel">
-        <div class="carousel-track" id="banner-track">
-            </div>
-    </section>
-
-    <div class="filter-bar" id="categorias">
-        <button class="filter-btn active" onclick="filtrar('todos')">Todos</button>
-        <button class="filter-btn" onclick="filtrar('jarrones')">Jarrones</button>
-        <button class="filter-btn" onclick="filtrar('portavelas')">Portavelas</button>
-        <button class="filter-btn" onclick="filtrar('bandejas')">Bandejas</button>
-        <button class="filter-btn" onclick="filtrar('joyeros')">Joyeros</button>
-        <button class="filter-btn" onclick="filtrar('ceniceros')">Ceniceros</button>
-    </div>
-
-    <main class="container" id="productos">
+    <main class="container">
         <div id="product-list" class="product-grid">
             </div>
     </main>
-
-    <section class="nosotros-container" id="nosotros">
-        <div class="nosotros-content">
-            <span class="nosotros-subtitle">Nuestra Esencia</span>
-            <h2>La Belleza de lo Consciente</h2>
-            <p>
-                En <strong>Pietra & Co.</strong>, creemos que el lujo reside en la simplicidad y el respeto por el entorno. 
-                Nuestras piezas nacen del minimalismo artesanal.
-            </p>
-            <div class="nosotros-features">
-                <div class="feature"><strong>Eco-Friendly</strong><span>Sin VOC</span></div>
-                <div class="feature"><strong>Hecho a Mano</strong><span>Piezas únicas</span></div>
-                <div class="feature"><strong>Durabilidad</strong><span>Elegancia pura</span></div>
-            </div>
-        </div>
-    </section>
 
     <div id="cart-drawer" class="cart-drawer">
         <div class="cart-header">
