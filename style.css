@@ -33,9 +33,17 @@ nav {
 
 .logo-nav {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    letter-spacing: 3px;
+    font-size: 1.8rem; /* Tamaño elegante para el nav */
+    font-weight: 300;
+    letter-spacing: 4px;
     text-transform: uppercase;
+    color: var(--crema); /* ESTO ES CLAVE: Color crema sobre fondo verde */
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.logo-nav:hover {
+    color: var(--oro); /* Cambia a dorado al pasar el mouse */
 }
 
 .nav-links { display: flex; align-items: center; gap: 25px; }
