@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nosotros | PIETRA</title>
+    <title>Pietra & Co. | Luxury Decor</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Playfair+Display:ital,wght@0,400;1,700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,47 +11,89 @@
 
     <nav class="navbar-luxury">
         <div class="nav-left">
-            <a href="index.html" style="color: var(--crema); text-decoration: none; font-size: 0.8rem; letter-spacing: 2px;">← VOLVER</a>
-        </div>
-        <div class="nav-center">
-            <span class="logo-brand">PIETRA</span>
-        </div>
-        <div class="nav-right">
+            <div class="menu-trigger" onclick="toggleMenu()">
+                <span class="hamburger">☰</span>
+                <span class="menu-label">Menú</span>
             </div>
-    </nav>
-
-    <section class="nosotros-page">
-        <div class="nosotros-hero">
-            <span class="nosotros-subtitle">Minimalismo Artesanal</span>
-            <h1>Nuestra Esencia</h1>
         </div>
 
-        <div class="nosotros-grid">
-            <div class="nosotros-text">
-                <h2>Diseño con Propósito</h2>
-                <p>En <strong>Pietra</strong>, transformamos la ecoresina en piezas de diseño exclusivo que cuentan una historia. Cada objeto es vertido, lijado y sellado a mano en nuestro taller, garantizando que no existan dos piezas iguales.</p>
-                
-                <p>Nuestra filosofía se basa en el <em>"Quiet Luxury"</em>: lujo silencioso que no necesita gritar para destacar. Buscamos la armonía entre la funcionalidad y la estética sostenible.</p>
-                
-                <div class="nosotros-values">
-                    <div class="value-item">
-                        <strong>Ecoresina</strong>
-                        <p>Usamos materiales libres de químicos nocivos (VOC), respetando tu hogar y el planeta.</p>
-                    </div>
-                    <div class="value-item">
-                        <strong>Terrazzo</strong>
-                        <p>Nuestra técnica de terrazo artesanal rescata la belleza de los fragmentos, creando texturas únicas.</p>
-                    </div>
+        <div class="nav-center">
+            <a href="#" class="logo-brand">PIETRA & CO.</a>
+        </div>
+
+        <div class="nav-right">
+            <div class="action-bar">
+                <span class="action-icon">🔍</span>
+                <span class="action-icon">♡</span>
+                <div class="cart-wrapper" onclick="toggleCart()">
+                    <span class="action-icon">🛒</span>
+                    <span id="cart-count">0</span>
                 </div>
             </div>
-            <div class="nosotros-image">
-                <img src="https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?q=80&w=1000" alt="Artesanía Pietra">
+        </div>
+    </nav>
+
+    <div id="side-menu" class="side-drawer">
+        <div class="drawer-header">
+            <button class="close-drawer" onclick="toggleMenu()">✕</button>
+        </div>
+        <div class="drawer-content">
+            <a href="#productos" onclick="toggleMenu()">Colección</a>
+            <a href="#categorias" onclick="toggleMenu()">Categorías</a>
+            <a href="#nosotros" onclick="toggleMenu()">Nosotros</a>
+        </div>
+    </div>
+
+    <header class="hero">
+        <h1>Minimalismo Artesanal</h1>
+        <p>Diseño sostenible en ecoresina para espacios exclusivos.</p>
+    </header>
+
+    <section class="banner-carousel">
+        <div class="carousel-track" id="banner-track">
+            </div>
+    </section>
+
+    <div class="filter-bar" id="categorias">
+        <button class="filter-btn active" onclick="filtrar('todos')">Todos</button>
+        <button class="filter-btn" onclick="filtrar('jarrones')">Jarrones</button>
+        <button class="filter-btn" onclick="filtrar('portavelas')">Portavelas</button>
+        <button class="filter-btn" onclick="filtrar('bandejas')">Bandejas</button>
+        <button class="filter-btn" onclick="filtrar('joyeros')">Joyeros</button>
+        <button class="filter-btn" onclick="filtrar('ceniceros')">Ceniceros</button>
+    </div>
+
+    <main class="container" id="productos">
+        <div id="product-list" class="product-grid"></div>
+    </main>
+
+    <section class="nosotros-container" id="nosotros">
+        <div class="nosotros-content">
+            <span class="nosotros-subtitle">Nuestra Esencia</span>
+            <h2>La Belleza de lo Consciente</h2>
+            <p>En <strong>Pietra & Co.</strong>, creemos que el lujo reside en la simplicidad y el respeto por el entorno. Piezas únicas de <strong>ecoresina</strong>.</p>
+            <div class="nosotros-features">
+                <div class="feature"><strong>Eco-Friendly</strong><span>Sin VOC</span></div>
+                <div class="feature"><strong>Hecho a Mano</strong><span>Piezas únicas</span></div>
+                <div class="feature"><strong>Durabilidad</strong><span>Elegancia pura</span></div>
             </div>
         </div>
     </section>
 
-    <footer style="text-align: center; padding: 50px; color: var(--oro); font-size: 0.7rem; letter-spacing: 3px;">
-        PIETRA &copy; 2026 | LIMA, PERÚ
-    </footer>
+    <div id="cart-drawer" class="cart-drawer">
+        <div class="cart-header">
+            <h3>Tu Selección</h3>
+            <button class="close-btn" onclick="toggleCart()">✕</button>
+        </div>
+        <div id="cart-items" class="cart-body"></div>
+        <div class="cart-footer">
+            <div class="row"><span>Subtotal:</span><span>S/ <span id="subtotal">0.00</span></span></div>
+            <div class="row"><span>Envío Lima:</span><span>S/ 12.00</span></div>
+            <div class="row total"><span>Total:</span><span>S/ <span id="total-final">0.00</span></span></div>
+            <button class="btn-whatsapp" onclick="enviarWhatsApp()">PEDIR POR WHATSAPP</button>
+        </div>
+    </div>
 
+    <script src="script.js"></script>
 </body>
+</html>
