@@ -10,28 +10,34 @@
 <body>
 
     <nav class="navbar-luxury">
-        <div class="nav-left">
-            <div class="menu-trigger" onclick="toggleMenu()">
-                <span class="hamburger">☰</span>
-                <span class="menu-label">Menú</span>
+    <div class="nav-left">
+        <div class="menu-trigger" onclick="toggleMenu()">
+            <span class="hamburger">☰</span>
+            <span class="menu-label">Menú</span>
+        </div>
+    </div>
+
+    <div class="nav-center">
+        <span class="logo-brand">PIETRA</span>
+    </div>
+
+    <div class="nav-right">
+        <div class="action-bar">
+            <div class="search-wrapper">
+                <input type="text" id="search-input" placeholder="Buscar..." onkeyup="ejecutarBusqueda()">
+                <span class="action-icon">🔍</span>
+            </div>
+            <div class="favorite-wrapper">
+                <span class="action-icon">♡</span>
+                <span id="fav-count" class="notif-badge">0</span>
+            </div>
+            <div class="cart-wrapper" onclick="toggleCart()">
+                <span class="action-icon">🛒</span>
+                <span id="cart-count" class="notif-badge">0</span>
             </div>
         </div>
-
-        <div class="nav-center">
-            <a href="#" class="logo-brand">PIETRA & CO.</a>
-        </div>
-
-        <div class="nav-right">
-            <div class="action-bar">
-                <span class="action-icon" title="Buscar">🔍</span>
-                <span class="action-icon" title="Favoritos">♡</span>
-                <div class="cart-wrapper" onclick="toggleCart()" title="Carrito">
-                    <span class="action-icon">🛒</span>
-                    <span id="cart-count">0</span>
-                </div>
-            </div>
-        </div>
-    </nav>
+    </div>
+</nav>
 
     <div id="side-menu" class="side-drawer">
         <div class="drawer-header">
