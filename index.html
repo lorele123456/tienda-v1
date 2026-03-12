@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PIETRA | Minimalismo Artesanal</title>
+    <title>PIETRA | mmMinimalismo Artesanal</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Playfair+Display:ital,wght@0,400;1,700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -51,22 +51,31 @@
     </div>
 
     <header class="hero">
-        <h1>r1- Minimalismo Artesanal</h1>
+        <h1>Minimalismo Artesanal</h1>
         <p>Ecoresina y Diseño Sostenible</p>
     </header>
 
+    <section class="banner-carousel">
+        <div class="carousel-track" id="banner-track"></div>
+    </section>
+
+    <div class="filter-bar">
+        <button class="filter-btn active" onclick="filtrar('todos')">Todos</button>
+        <button class="filter-btn" onclick="filtrar('jarrones')">Jarrones</button>
+        <button class="filter-btn" onclick="filtrar('portavelas')">Portavelas</button>
+        <button class="filter-btn" onclick="filtrar('bandejas')">Bandejas</button>
+    </div>
+
     <main class="container">
-        <div id="product-list" class="product-grid">
-            </div>
+        <div id="product-list" class="product-grid"></div>
     </main>
 
     <div id="cart-drawer" class="cart-drawer">
         <div class="cart-header">
             <h3>Tu Selección</h3>
-            <button class="close-btn" onclick="toggleCart()">✕</button>
+            <button onclick="toggleCart()">✕</button>
         </div>
-        <div id="cart-items" class="cart-body">
-            </div>
+        <div id="cart-items" class="cart-body"></div>
         <div class="cart-footer">
             <div class="row"><span>Subtotal:</span><span>S/ <span id="subtotal">0.00</span></span></div>
             <div class="row"><span>Envío Lima:</span><span>S/ 12.00</span></div>
