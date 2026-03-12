@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PIETRA & CO. | Minimalismo Artesanal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500;600&family=Playfair+Display:ital,wght@0,400;1,700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,7 +13,6 @@
         <div class="nav-left">
             <div class="menu-trigger" onclick="toggleMenu()">
                 <span class="hamburger">☰</span>
-                <span class="menu-label">Menú</span>
             </div>
         </div>
         <div class="nav-center">
@@ -25,6 +24,10 @@
                     <input type="text" id="search-input" placeholder="Buscar..." onkeyup="ejecutarBusqueda()">
                     <span class="action-icon">🔍</span>
                 </div>
+                <div class="favorite-wrapper">
+                    <span class="action-icon">♡</span>
+                    <span id="fav-count" class="notif-badge">0</span>
+                </div>
                 <div class="cart-wrapper" onclick="toggleCart()">
                     <span class="action-icon">🛒</span>
                     <span id="cart-count" class="notif-badge">0</span>
@@ -32,6 +35,21 @@
             </div>
         </div>
     </nav>
+
+    <div id="side-menu" class="side-drawer">
+        <div class="drawer-header">
+            <button class="close-drawer" onclick="toggleMenu()">✕</button>
+        </div>
+        <nav class="drawer-content">
+            <div class="menu-item">
+                <span class="menu-link" onclick="toggleSubmenu()">COLECCIONES ▾</span>
+                <div id="submenu-colecciones" class="submenu">
+                    </div>
+            </div>
+            <a href="nosotros.html" class="menu-link">NOSOTROS</a>
+            <a href="https://wa.me/51987173565" class="menu-link">CONTACTO</a>
+        </nav>
+    </div>
 
     <section class="banner-carousel">
         <div class="carousel-track" id="banner-track"></div>
