@@ -15,8 +15,47 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body { background: var(--crema); color: var(--verde); font-family: 'Montserrat', sans-serif; scroll-behavior: smooth; }
+/* Importa una fuente elegante de Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=Playfair+Display:wght@400;600&display=swap');
 
+.logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 300;
+    letter-spacing: 0.5rem; /* Esto da el toque de lujo */
+    text-transform: uppercase;
+    color: #1a3a3a; /* El verde oscuro de tu referencia */
+    margin: 20px 0;
+    text-align: center;
+}
 
+/* Contenedor del Carrusel */
+.banner-carousel {
+    width: 100%;
+    max-width: 1200px;
+    height: 450px; /* Altura similar a la referencia de Falabella */
+    margin: 0 auto 40px;
+    position: relative;
+    overflow: hidden;
+    background: #f9f9f9;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.8s cubic-bezier(0.45, 0, 0.55, 1);
+    height: 100%;
+}
+
+.slide {
+    min-width: 100%;
+    height: 100%;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Para que la imagen no se deforme */
+}
 
 /* NAVEGACIÓN */
 
@@ -30,7 +69,7 @@ nav {
 
 }
 
-.logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; letter-spacing: 3px; }
+
 
 .nav-links { display: flex; align-items: center; gap: 25px; }
 
