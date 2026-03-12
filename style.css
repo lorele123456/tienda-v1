@@ -95,68 +95,7 @@ body {
     font-weight: bold;
 }
 
-/* BUSCADOR */
-.search-wrapper {
-    display: flex;
-    align-items: center;
-    background: rgba(255,255,255,0.1);
-    padding: 5px 15px;
-    border-radius: 20px;
-}
-#search-input {
-    background: none;
-    border: none;
-    color: var(--crema);
-    outline: none;
-    width: 0;
-    transition: 0.4s;
-}
-.search-wrapper:hover #search-input { width: 100px; }
 
-/* NOTIFICACIONES (Burbujas) */
-.notif-badge {
-    background: var(--oro);
-    color: var(--verde);
-    font-size: 0.6rem;
-    font-weight: bold;
-    padding: 2px 5px;
-    border-radius: 50%;
-    position: absolute;
-    top: -8px;
-    right: -8px;
-}
-
-/* CORAZÓN EN IMAGEN */
-.img-container { position: relative; }
-.fav-btn-item {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: white;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    z-index: 10;
-    transition: 0.3s;
-}
-.fav-btn-item.active { color: var(--rojo-oferta); }
-
-/* ESTILOS CARRITO MEJORADOS */
-.cart-item {
-    display: grid;
-    grid-template-columns: 60px 1fr auto;
-    gap: 15px;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
-}
-.cart-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
 /* 3. MENÚ LATERAL (SIDE DRAWER) */
 .side-drawer {
     position: fixed;

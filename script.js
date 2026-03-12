@@ -1,5 +1,5 @@
 /**
- * 1. CONFIGURACIÓN GLOBAL Y ESTADO
+ * 1. CONFIGURACIÓN GLOBAL
  */
 const SHEET_ID = '1BoWQQk73dRJdH3NTHautP-aixEbDr3uRWgXfmlbUP20';
 const GID_BANNERS = '338089071'; 
@@ -10,47 +10,30 @@ let inventarioCompleto = [];
 let carrito = [];
 let currentSlide = 0;
 
-/**
- * 2. INTERFAZ DE NAVEGACIÓN
- */
 function toggleMenu() {
     const menu = document.getElementById('side-menu');
-    if (menu) menu.classList.toggle('active');
-}
-
-function toggleCart(forceOpen = null) {
-    const cart = document.getElementById('cart-drawer');
-    if (!cart) return;
-    if (forceOpen === true) cart.classList.add('open');
-    else if (forceOpen === false) cart.classList.remove('open');
-    else cart.classList.toggle('open');
-}
-
-function toggleDetalles(btn) {
-    const texto = btn.nextElementSibling;
-    if (texto) {
-        texto.classList.toggle('show');
-        btn.innerText = texto.classList.contains('show') ? '▲ Cerrar' : '▼ Detalles';
-    }
+    menu.classList.toggle('active');
 }
 
 /**
- * 3. CARGA DE DATOS DESDE GOOGLE SHEETS
+ * 2. CARGA DE DATOS (PRODUCTOS Y BANNERS)
  */
 async function obtenerDatos() {
+    // Cachebuster para asegurar datos siempre frescos
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&cachebuster=${Date.now()}`;
     
     try {
         const respuesta = await fetch(url);
         const csv = await respuesta.text();
         
+        // Detección automática de separador (coma o punto y coma)
         const separador = csv.includes('","') ? ',' : (csv.includes('";"') ? ';' : ',');
         const filas = csv.split(/\r?\n/).slice(1);
 
         inventarioCompleto = filas.map(f => {
             const c = f.split(separador).map(x => x.replace(/^"|"$/g, '').trim());
             
-            // Procesamiento de imagen de Drive
+            // Lógica para procesar imágenes de Google Drive
             let imgId = "";
             let linkOriginal = c[4] || "";
             if (linkOriginal.includes('/d/')) imgId = linkOriginal.split('/d/')[1].split('/')[0];
@@ -69,9 +52,10 @@ async function obtenerDatos() {
             };
         }).filter(p => p.nombre);
 
+        console.log("Inventario cargado:", inventarioCompleto);
         renderizar(inventarioCompleto);
     } catch (e) {
-        console.error("Error cargando productos:", e);
+        console.error("Error crítico cargando productos:", e);
     }
 }
 
@@ -85,7 +69,7 @@ async function inicializarCarrusel() {
         const track = document.getElementById('banner-track');
         if (!track) return;
 
-        track.innerHTML = ''; 
+        track.innerHTML = ''; // Limpiar antes de cargar
 
         filas.forEach(f => {
             const c = f.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/^"|"$/g, '').trim());
@@ -114,7 +98,7 @@ async function inicializarCarrusel() {
 }
 
 /**
- * 4. RENDERIZADO Y LÓGICA DE PRODUCTOS
+ * 3. RENDERIZADO Y FILTROS
  */
 function renderizar(lista) {
     const contenedor = document.getElementById('product-list');
@@ -139,7 +123,7 @@ function renderizar(lista) {
                     <img src="${p.imagen}" alt="${p.nombre}" loading="lazy">
                 </div>
                 <div class="product-info">
-                    <span class="brand-label">PIETRA - Minimalismo Artesanal</span>
+                    <span class="brand-label">PIETRA & CO.</span>
                     <h3>${p.nombre}</h3>
                     <div class="price-row">${preciosHTML}</div>
                     <span class="desc-toggle" onclick="toggleDetalles(this)">▼ Detalles</span>
@@ -164,6 +148,9 @@ function filtrar(catRecibida) {
     renderizar(filtrados);
 }
 
+/**
+ * 4. SISTEMA DEL CARRUSEL
+ */
 function nextSlide() {
     const track = document.getElementById('banner-track');
     const slides = document.querySelectorAll('.slide');
@@ -174,7 +161,7 @@ function nextSlide() {
 }
 
 /**
- * 5. GESTIÓN DEL CARRITO Y WHATSAPP
+ * 5. GESTIÓN DEL CARRITO
  */
 function agregarCarrito(id) {
     const p = inventarioCompleto.find(item => item.id === id);
@@ -203,10 +190,10 @@ function actualizarUI() {
     carrito.forEach((p, i) => {
         sub += p.precio;
         listaHtml.innerHTML += `
-            <div class="cart-item" style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
-                <span style="font-size:0.9rem;">${p.nombre}</span>
-                <span style="font-size:0.9rem; font-weight:bold;">S/ ${p.precio.toFixed(2)} 
-                    <button onclick="quitarCarrito(${i})" style="color:var(--rojo-oferta); border:none; background:none; cursor:pointer; margin-left:10px;">✕</button>
+            <div class="cart-item">
+                <span>${p.nombre}</span>
+                <span>S/ ${p.precio.toFixed(2)} 
+                    <button onclick="quitarCarrito(${i})" style="color:red; border:none; background:none; cursor:pointer;">✕</button>
                 </span>
             </div>`;
     });
@@ -215,6 +202,23 @@ function actualizarUI() {
     if (subHtml) subHtml.innerText = sub.toFixed(2);
     if (totHtml) totHtml.innerText = final.toFixed(2);
     if (countHtml) countHtml.innerText = carrito.length;
+}
+
+/**
+ * 6. UTILIDADES E INTERACCIONES
+ */
+function toggleCart(open = null) {
+    const cart = document.getElementById('cart-drawer');
+    if (!cart) return;
+    if (open === true) cart.classList.add('open');
+    else if (open === false) cart.classList.remove('open');
+    else cart.classList.toggle('open');
+}
+
+function toggleDetalles(btn) {
+    const texto = btn.nextElementSibling;
+    texto.classList.toggle('show');
+    btn.innerText = texto.classList.contains('show') ? '▲ Cerrar' : '▼ Detalles';
 }
 
 function enviarWhatsApp() {
@@ -227,9 +231,7 @@ function enviarWhatsApp() {
     window.open(`https://wa.me/${NUMERO_WA}?text=${encodeURIComponent(mensaje)}`, '_blank');
 }
 
-/**
- * 6. INICIALIZACIÓN
- */
+// INICIALIZACIÓN AL CARGAR LA PÁGINA
 window.onload = () => {
     obtenerDatos(); 
     inicializarCarrusel();
