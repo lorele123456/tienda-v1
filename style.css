@@ -20,15 +20,103 @@ body {
 }
 
 /* 2. NAVBAR LUXURY (AJUSTE DE ESQUINAS) */
+/* 2. NAVBAR LUXURY (LOGO CLAVADO AL CENTRO) */
 .navbar-luxury {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr; /* Tres columnas para centrar el logo */
-    align-items: center;
-    padding: 1.2rem 5%;
     background: var(--verde);
+    height: 80px; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    padding: 0 5%;
     position: sticky;
     top: 0;
     z-index: 1000;
+}
+
+.nav-left {
+    z-index: 1002; 
+    display: flex;
+    align-items: center;
+}
+
+.logo-brand {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); 
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    letter-spacing: 8px;
+    color: var(--crema);
+    text-transform: uppercase;
+    font-weight: 300;
+    pointer-events: none; 
+    white-space: nowrap;
+}
+
+.nav-right {
+    z-index: 1002;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.action-bar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+#search-input {
+    background: none;
+    border: none;
+    color: var(--crema);
+    width: 0;
+    transition: 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.search-wrapper:hover #search-input, #search-input:focus {
+    width: 80px;
+}
+
+.favorite-wrapper, .cart-wrapper {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.notif-badge {
+    background: var(--oro);
+    color: var(--verde);
+    font-size: 0.6rem;
+    font-weight: bold;
+    min-width: 15px;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+}
+
+@media (max-width: 600px) {
+    .logo-brand {
+        font-size: 1.4rem;
+        letter-spacing: 4px;
+    }
+    #search-input {
+        display: none; 
+    }
 }
 
 /* Izquierda: Hamburguesa */
