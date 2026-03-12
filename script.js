@@ -1,7 +1,8 @@
-/** * CONFIGURACIÓN GLOBAL 
+/**
+ * 1. CONFIGURACIÓN GLOBAL
  */
 const SHEET_ID = '1BoWQQk73dRJdH3NTHautP-aixEbDr3uRWgXfmlbUP20';
-const GID_BANNERS = '338089071'; // GID actualizado para la pestaña de banners
+const GID_BANNERS = '338089071'; 
 const NUMERO_WA = "51987173565";
 const COSTO_ENVIO = 12.00;
 
@@ -9,31 +10,32 @@ let inventarioCompleto = [];
 let carrito = [];
 let currentSlide = 0;
 
-/** * 1. OBTENCIÓN DE DATOS (PRODUCTOS)
+/**
+ * 2. CARGA DE DATOS (PRODUCTOS Y BANNERS)
  */
 async function obtenerDatos() {
-    // Cachebuster evita que el navegador guarde una versión vieja del Excel
+    // Cachebuster para asegurar datos siempre frescos
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&cachebuster=${Date.now()}`;
     
     try {
         const respuesta = await fetch(url);
         const csv = await respuesta.text();
         
-        // Determina si el Excel usa comas o puntos y coma automáticamente
+        // Detección automática de separador (coma o punto y coma)
         const separador = csv.includes('","') ? ',' : (csv.includes('";"') ? ';' : ',');
-        const filas = csv.split(/\r?\n/).slice(1); // Ignora la cabecera
+        const filas = csv.split(/\r?\n/).slice(1);
 
         inventarioCompleto = filas.map(f => {
             const c = f.split(separador).map(x => x.replace(/^"|"$/g, '').trim());
             
-            // Lógica para transformar links de Google Drive en imágenes directas
+            // Lógica para procesar imágenes de Google Drive
             let imgId = "";
             let linkOriginal = c[4] || "";
             if (linkOriginal.includes('/d/')) imgId = linkOriginal.split('/d/')[1].split('/')[0];
             else if (linkOriginal.includes('id=')) imgId = linkOriginal.split('id=')[1].split('&')[0];
             
-            // Cambia esto en ambas funciones para evitar el error de la imagen
-const imgFinal = imgId ? `https://lh3.googleusercontent.com/u/0/d/${imgId}` : "https://placehold.co/400x500?text=PIETRA";
+            const imgFinal = imgId ? `https://lh3.googleusercontent.com/u/0/d/${imgId}` : "https://placehold.co/400x500?text=PIETRA";
+
             return {
                 id: c[0],
                 nombre: c[1],
@@ -52,16 +54,55 @@ const imgFinal = imgId ? `https://lh3.googleusercontent.com/u/0/d/${imgId}` : "h
     }
 }
 
-/** * 2. RENDERIZADO Y FILTROS 
+async function inicializarCarrusel() {
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_BANNERS}&cb=${Date.now()}`;
+    
+    try {
+        const res = await fetch(url);
+        const csv = await res.text();
+        const filas = csv.split(/\r?\n/).slice(1);
+        const track = document.getElementById('banner-track');
+        if (!track) return;
+
+        track.innerHTML = ''; // Limpiar antes de cargar
+
+        filas.forEach(f => {
+            const c = f.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/^"|"$/g, '').trim());
+            const imgUrl = c[0]; 
+            
+            if(imgUrl) {
+                let imgId = "";
+                if (imgUrl.includes('/d/')) imgId = imgUrl.split('/d/')[1].split('/')[0];
+                else if (imgUrl.includes('id=')) imgId = imgUrl.split('id=')[1].split('&')[0];
+                
+                const finalImg = imgId ? `https://lh3.googleusercontent.com/u/0/d/${imgId}` : imgUrl;
+
+                track.innerHTML += `
+                    <div class="slide">
+                        <img src="${finalImg}" alt="Pietra Banner">
+                    </div>`;
+            }
+        });
+
+        if (document.querySelectorAll('.slide').length > 1) {
+            setInterval(nextSlide, 4000); 
+        }
+    } catch (e) { 
+        console.error("Error carrusel:", e); 
+    }
+}
+
+/**
+ * 3. RENDERIZADO Y FILTROS
  */
 function renderizar(lista) {
     const contenedor = document.getElementById('product-list');
+    if (!contenedor) return;
     contenedor.innerHTML = '';
 
     lista.forEach(p => {
         let preciosHTML = `<span class="current-price">S/ ${p.precio.toFixed(2)}</span>`;
         
-        // Cálculo de porcentaje de descuento si existe precio anterior
         if (p.precioAnterior && p.precioAnterior > p.precio) {
             const porcentaje = Math.round(((p.precioAnterior - p.precio) / p.precioAnterior) * 100);
             preciosHTML = `
@@ -74,7 +115,7 @@ function renderizar(lista) {
         contenedor.innerHTML += `
             <div class="product-card">
                 <div class="img-container">
-                    <img src="${p.imagen}" alt="${p.nombre}">
+                    <img src="${p.imagen}" alt="${p.nombre}" loading="lazy">
                 </div>
                 <div class="product-info">
                     <span class="brand-label">PIETRA & CO.</span>
@@ -102,46 +143,20 @@ function filtrar(catRecibida) {
     renderizar(filtrados);
 }
 
-/** * 3. SISTEMA DE CARRUSEL (BANNERS)
+/**
+ * 4. SISTEMA DEL CARRUSEL
  */
-async function inicializarCarrusel() {
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_BANNERS}`;
-    
-    try {
-        const res = await fetch(url);
-        const csv = await res.text();
-        const filas = csv.split('\n').slice(1);
-        const track = document.getElementById('banner-track');
-
-        filas.forEach(f => {
-            const c = f.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            const imgUrl = c[0].replace(/"/g, '').trim(); 
-            
-            let imgId = imgUrl.includes('/d/') ? imgUrl.split('/d/')[1].split('/')[0] : "";
-            const finalImg = imgId ? `https://lh3.googleusercontent.com/u/0/d/${imgId}` : imgUrl;
-
-            if(imgUrl) {
-                track.innerHTML += `
-                    <div class="slide">
-                        <img src="${finalImg}" alt="Pietra Banner">
-                    </div>`;
-            }
-        });
-
-        setInterval(nextSlide, 4000); // Cambio cada 4 segundos
-    } catch (e) { console.error("Error carrusel:", e); }
-}
-
 function nextSlide() {
     const track = document.getElementById('banner-track');
     const slides = document.querySelectorAll('.slide');
-    if (slides.length === 0) return;
+    if (!track || slides.length === 0) return;
 
     currentSlide = (currentSlide + 1) % slides.length;
     track.style.transform = `translateX(-${currentSlide * 100}%)`;
 }
 
-/** * 4. GESTIÓN DEL CARRITO Y UI 
+/**
+ * 5. GESTIÓN DEL CARRITO
  */
 function agregarCarrito(id) {
     const p = inventarioCompleto.find(item => item.id === id);
@@ -163,6 +178,7 @@ function actualizarUI() {
     const totHtml = document.getElementById('total-final');
     const countHtml = document.getElementById('cart-count');
     
+    if (!listaHtml) return;
     listaHtml.innerHTML = '';
     let sub = 0;
 
@@ -178,15 +194,17 @@ function actualizarUI() {
     });
 
     const final = sub > 0 ? sub + COSTO_ENVIO : 0;
-    subHtml.innerText = sub.toFixed(2);
-    totHtml.innerText = final.toFixed(2);
-    countHtml.innerText = carrito.length;
+    if (subHtml) subHtml.innerText = sub.toFixed(2);
+    if (totHtml) totHtml.innerText = final.toFixed(2);
+    if (countHtml) countHtml.innerText = carrito.length;
 }
 
-/** * 5. UTILIDADES Y ENVÍO 
+/**
+ * 6. UTILIDADES E INTERACCIONES
  */
 function toggleCart(open = null) {
     const cart = document.getElementById('cart-drawer');
+    if (!cart) return;
     if (open === true) cart.classList.add('open');
     else if (open === false) cart.classList.remove('open');
     else cart.classList.toggle('open');
