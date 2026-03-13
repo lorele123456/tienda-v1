@@ -72,40 +72,45 @@ body { background: var(--crema); color: var(--verde); font-family: 'Montserrat',
 
 @media (max-width: 600px) { .product-grid { grid-template-columns: 1fr; } .cart-drawer { width: 100%; } }
 
-/* --- CONFIGURACIÓN DEL CARRUSEL RESPONSIVE --- */
+//* --- CONFIGURACIÓN DEL CARRUSEL OPTIMIZADA --- */
 .banner-carousel {
     width: 100%;
-    height: 500px; /* Altura para PC */
+    height: 400px; /* Reducido de 500px a 400px para que no sea tan alto */
     overflow: hidden;
     position: relative;
-    background-color: #f0f0f0;
+    background-color: var(--verde); /* Fondo verde por si la imagen es angosta */
 }
 
 .carousel-track {
-    display: flex; /* Esto evita que se pongan uno debajo del otro */
+    display: flex;
     width: 100%;
     height: 100%;
     transition: transform 0.8s cubic-bezier(0.45, 0, 0.55, 1);
 }
 
 .slide {
-    min-width: 100%; /* Cada imagen ocupa el 100% del ancho del carrusel */
+    min-width: 100%;
     height: 100%;
-    flex-shrink: 0;
+    display: flex;
+    justify-content: center; /* Centra la imagen si es más angosta que la pantalla */
+    align-items: center;
 }
 
 .slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Ajusta la imagen sin deformarla */
-    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;      /* Permite que la imagen mantenga su ancho real */
+    height: auto;     /* Permite que la imagen mantenga su alto real */
+    object-fit: contain; /* ¡CLAVE! Muestra la imagen completa sin recortar nada */
 }
 
-/* --- AJUSTES PARA CELULARES --- */
+/* --- AJUSTE RESPONSIVE (CELULARES) --- */
 @media (max-width: 768px) {
     .banner-carousel {
-        height: 300px; /* Más bajo para celulares */
+        height: 250px; /* Altura más cómoda para celulares */
     }
+}
+
     
     .product-grid {
         grid-template-columns: repeat(2, 1fr); /* 2 productos por fila en tablet/celular grande */
