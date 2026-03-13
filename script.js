@@ -126,18 +126,30 @@ async function cargarBanners() {
         const csv = await res.text();
         const filas = csv.split(/\r?\n/).slice(1);
         const track = document.getElementById('banner-track');
-        filas.forEach(f => {
-            const img = limpiarLink(f.replace(/"/g, ''));
-            track.innerHTML += `<div class="slide"><img src="${img}"></div>`;
-        });
-        setInterval(() => {
-            const slides = document.querySelectorAll('.slide');
-            currentSlide = (currentSlide + 1) % slides.length;
-            track.style.transform = `translateX(-${currentSlide * 100}%)`;
-        }, 5000);
-    } catch (e) { console.error(e); }
-}
+        
+        if (!track) return;
+        track.innerHTML = ''; // Limpia antes de cargar
 
+        filas.forEach(f => {
+            const imgUrl = f.replace(/"/g, '').trim();
+            if(imgUrl) {
+                const imgFinal = limpiarLink(imgUrl);
+                track.innerHTML += `<div class="slide"><img src="${imgFinal}" alt="Banner Pietra & Co"></div>`;
+            }
+        });
+
+        // Inicia el movimiento solo si hay más de una imagen
+        const slides = document.querySelectorAll('.slide');
+        if (slides.length > 1) {
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }, 5000); // Cambia cada 5 segundos
+        }
+    } catch (e) { 
+        console.error("Error al cargar banners:", e); 
+    }
+}
 function enviarWhatsApp() {
     let msg = `*PEDIDO PIETRA & CO.*\n\n`;
     carrito.forEach(p => msg += `• ${p.nombre} (S/ ${p.precio.toFixed(2)})\n`);
