@@ -45,16 +45,15 @@ body { background: var(--crema); color: var(--verde); font-family: 'Montserrat',
 .submenu.show { display: block; }
 .submenu a { color: var(--oro); text-decoration: none; display: block; font-size: 0.9rem; margin-bottom: 15px; text-transform: uppercase; }
 
-/* CUADRÍCULA DE PRODUCTOS */
+/* CUADRÍCULA DE PRODUCTOS (PC / LAPTOP) */
 .product-grid {
     display: grid;
-    /* Esta es la línea que define las 3 columnas */
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 30px; /* Espacio entre productos */
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas por defecto */
+    gap: 30px;
     padding: 40px 5%;
 }
-.product-card { background: white; padding: 15px; position: relative; text-align: center; }
 
+.product-card { background: white; padding: 15px; position: relative; text-align: center; }
 .img-container { width: 100%; height: 380px; position: relative; overflow: hidden; }
 .img-container img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -77,66 +76,39 @@ body { background: var(--crema); color: var(--verde); font-family: 'Montserrat',
 .cart-item { display: flex; gap: 15px; align-items: center; padding-bottom: 15px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
 .cart-item img { width: 60px; height: 60px; object-fit: cover; }
 
-@media (max-width: 600px) { .product-grid { grid-template-columns: 1fr; } .cart-drawer { width: 100%; } }
-
-//* --- CONFIGURACIÓN DEL CARRUSEL OPTIMIZADA --- */
+/* CARRUSEL */
 .banner-carousel {
-    width: 100%;
-    height: 400px; /* Reducido de 500px a 400px para que no sea tan alto */
-    overflow: hidden;
-    position: relative;
-    background-color: var(--verde); /* Fondo verde por si la imagen es angosta */
+    width: 100%; height: 400px; overflow: hidden; position: relative; background-color: var(--verde);
 }
-
 .carousel-track {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.8s cubic-bezier(0.45, 0, 0.55, 1);
+    display: flex; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.45, 0, 0.55, 1);
 }
-
 .slide {
-    min-width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center; /* Centra la imagen si es más angosta que la pantalla */
-    align-items: center;
+    min-width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;
 }
-
 .slide img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;      /* Permite que la imagen mantenga su ancho real */
-    height: auto;     /* Permite que la imagen mantenga su alto real */
-    object-fit: contain; /* ¡CLAVE! Muestra la imagen completa sin recortar nada */
+    max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain;
 }
 
-/* --- AJUSTE RESPONSIVE (CELULARES) --- */
-@media (max-width: 768px) {
-    .banner-carousel {
-        height: 250px; /* Altura más cómoda para celulares */
-    }
-}
+/* --- SECCIÓN RESPONSIVE (CELULARES Y TABLETS) --- */
 
-    
+@media (max-width: 800px) {
     .product-grid {
-        grid-template-columns: repeat(1, 1fr); /* 2 productos por fila en tablet/celular grande */
-        gap: 15px;
-        padding: 20px 3%;
+        grid-template-columns: 1fr; /* 1 columna en celulares */
+        gap: 20px;
+        padding: 20px 5%;
+    }
+    
+    .banner-carousel {
+        height: 250px; /* Carrusel más pequeño en celular */
     }
 
     .logo-brand {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
         letter-spacing: 2px;
     }
 
-
-@media (max-width: 480px) {
-    .product-grid {
-        grid-template-columns: 1fr; /* 1 producto por fila en celulares pequeños */
-    }
-    
-    .navbar-luxury {
-        padding: 0 3%;
+    .cart-drawer {
+        width: 100%; /* Carrito ocupa toda la pantalla en celular */
     }
 }
