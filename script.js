@@ -144,7 +144,7 @@ async function cargarBanners() {
             setInterval(() => {
                 currentSlide = (currentSlide + 1) % slides.length;
                 track.style.transform = `translateX(-${currentSlide * 100}%)`;
-            }, 3000); // Cambia cada 5 segundos
+            }, 2000); // Cambia cada 2 segundos
         }
     } catch (e) { 
         console.error("Error al cargar banners:", e); 
