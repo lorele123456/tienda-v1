@@ -58,10 +58,10 @@ async function cargarMenuColecciones() {
 
 // NUEVA FUNCIÓN: Carga Nosotros, Cuidado, Blog desde Excel
 async function cargarMenuExtra() {
+    // Agregamos &cb= al final para que siempre traiga datos frescos del Excel
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_MENU_EXTRA}&cb=${Date.now()}`;
     const contenedor = document.getElementById('menu-dinamico-excel');
-    if (!contenedor) return;
-
+    
     try {
         const res = await fetch(url);
         const csv = await res.text();
@@ -69,12 +69,13 @@ async function cargarMenuExtra() {
         
         let html = '';
         filas.forEach(f => {
-            const c = f.split(/,(?=(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/"/g, '').trim());
+            // Esta línea limpia mejor las comas del Excel
+            const c = f.split(',').map(x => x.replace(/"/g, '').trim());
             const nombre = c[0];
             const tipo = c[1] ? c[1].toUpperCase() : '';
             const destino = c[2];
 
-            if (nombre) {
+            if (nombre && tipo) {
                 if (tipo === 'PAGINA') {
                     html += `<a href="#" class="menu-link" onclick="cargarPaginaTexto('${destino}')">${nombre}</a>`;
                 } else if (tipo === 'LINK') {
@@ -83,7 +84,10 @@ async function cargarMenuExtra() {
             }
         });
         contenedor.innerHTML = html;
-    } catch (e) { console.error("Error cargando menú extra:", e); }
+        console.log("Menú extra cargado con éxito");
+    } catch (e) { 
+        console.error("Error cargando el menú extra:", e); 
+    }
 }
 
 // NUEVA FUNCIÓN: Muestra el contenido de texto (Nosotros, etc.)
