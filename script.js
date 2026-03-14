@@ -1,8 +1,6 @@
 const SHEET_ID = '1BoWQQk73dRJdH3NTHautP-aixEbDr3uRWgXfmlbUP20';
 const GID_BANNERS = '338089071';
-const GID_COLECCIONES = '1042206871';
-const GID_MENU_EXTRA = '804444273';      // Hoja Menu_Principal
-const GID_CONTENIDO = '1199133365';      // Hoja Contenido_Paginas
+const GID_COLECCIONES = '1042206871'; // Tu nuevo GID
 const NUMERO_WA = "51987173565";
 const COSTO_ENVIO = 12.00;
 
@@ -16,14 +14,13 @@ function limpiarLink(url) {
     let id = "";
     if (url.includes('/d/')) id = url.split('/d/')[1].split('/')[0];
     else if (url.includes('id=')) id = url.split('id=')[1].split('&')[0];
-    return id ? `https://drive.google.com/uc?export=view&id=${id}` : url;
+    return id ? `https://lh3.googleusercontent.com/u/0/d/${id}` : url;
 }
 
 async function inicializar() {
     await obtenerProductos();
     await cargarBanners();
     await cargarMenuColecciones();
-    await cargarMenuExtra(); // Nueva función para Nosotros, Cuidado, etc.
 }
 
 async function obtenerProductos() {
@@ -40,7 +37,6 @@ async function obtenerProductos() {
     } catch (e) { console.error(e); }
 }
 
-// Carga Bandejas, Portainciensos, etc.
 async function cargarMenuColecciones() {
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_COLECCIONES}&cb=${Date.now()}`;
     const submenu = document.getElementById('submenu-colecciones');
@@ -48,7 +44,7 @@ async function cargarMenuColecciones() {
         const res = await fetch(url);
         const csv = await res.text();
         const filas = csv.split(/\r?\n/).slice(1);
-        submenu.innerHTML = `<a href="#" onclick="window.location.reload();">Ver Todo</a>`;
+        submenu.innerHTML = `<a href="#" onclick="renderizar(inventario); toggleMenu();">Ver Todo</a>`;
         filas.forEach(f => {
             const nombre = f.replace(/"/g, '').trim();
             if(nombre) submenu.innerHTML += `<a href="#" onclick="filtrarCategoria('${nombre.toLowerCase()}')">${nombre}</a>`;
@@ -56,78 +52,8 @@ async function cargarMenuColecciones() {
     } catch (e) { console.error(e); }
 }
 
-// NUEVA FUNCIÓN: Carga Nosotros, Cuidado, Blog desde Excel
-async function cargarMenuExtra() {
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_MENU_EXTRA}&cb=${Date.now()}`;
-    const contenedor = document.getElementById('menu-dinamico-excel');
-    if (!contenedor) return;
-
-    try {
-        const res = await fetch(url);
-        const csv = await res.text();
-        const filas = csv.split(/\r?\n/).slice(1);
-        
-        let html = '';
-        filas.forEach(f => {
-            const c = f.split(/,(?=(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/"/g, '').trim());
-            const nombre = c[0];
-            const tipo = c[1] ? c[1].toUpperCase() : '';
-            const destino = c[2];
-
-            if (nombre) {
-                if (tipo === 'PAGINA') {
-                    html += `<a href="#" class="menu-link" onclick="cargarPaginaTexto('${destino}')">${nombre}</a>`;
-                } else if (tipo === 'LINK') {
-                    html += `<a href="${destino}" target="_blank" class="menu-link">${nombre}</a>`;
-                }
-            }
-        });
-        contenedor.innerHTML = html;
-    } catch (e) { console.error("Error cargando menú extra:", e); }
-}
-
-// NUEVA FUNCIÓN: Muestra el contenido de texto (Nosotros, etc.)
-async function cargarPaginaTexto(idDestino) {
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_CONTENIDO}&cb=${Date.now()}`;
-    
-    try {
-        const res = await fetch(url);
-        const csv = await res.text();
-        const filas = csv.split(/\r?\n/).slice(1);
-        
-        const datos = filas.map(f => f.split(/,(?=(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/"/g, '')))
-                          .find(col => col[0] === idDestino);
-
-        if (datos) {
-            const [id, titulo, cuerpo, imagen] = datos;
-            const cont = document.getElementById('product-list');
-            
-            // Ocultar banner y hero
-            if(document.querySelector('.banner-carousel')) document.querySelector('.banner-carousel').style.display = 'none';
-            if(document.querySelector('.hero')) document.querySelector('.hero').style.display = 'none';
-
-            cont.innerHTML = `
-                <div class="pagina-dinamica" style="padding: 40px 5%; max-width: 800px; margin: auto; animation: fadeIn 0.5s ease;">
-                    <h1 style="font-family:'Cormorant Garamond'; font-size: 2.8rem; color: var(--verde); text-align: center;">${titulo}</h1>
-                    <div style="border-top: 1px solid var(--oro); width: 50px; margin: 20px auto 40px;"></div>
-                    ${imagen ? `<img src="${limpiarLink(imagen)}" style="width:100%; border-radius:2px; margin-bottom:30px; object-fit:cover;">` : ''}
-                    <div style="line-height: 1.8; color: #333; font-size: 1.1rem; text-align: justify; font-family:'Montserrat';">
-                        ${cuerpo.replace(/\n/g, '<br>')}
-                    </div>
-                    <div style="text-align: center; margin-top: 50px;">
-                        <button onclick="window.location.reload()" style="background: var(--verde); color: white; border: none; padding: 12px 25px; cursor: pointer; font-family: 'Montserrat'; letter-spacing: 1px;">VOLVER A LA TIENDA</button>
-                    </div>
-                </div>
-            `;
-            window.scrollTo(0,0);
-            toggleMenu();
-        }
-    } catch (e) { console.error("Error al cargar la página de texto:", e); }
-}
-
 function renderizar(lista) {
     const cont = document.getElementById('product-list');
-    if (!cont) return;
     cont.innerHTML = '';
     lista.forEach(p => {
         const esFav = favoritos.includes(p.id);
@@ -155,10 +81,6 @@ function ejecutarBusqueda() {
 }
 
 function filtrarCategoria(cat) {
-    // Asegurar que se vean el banner y hero si estaban ocultos por una página de texto
-    if(document.querySelector('.banner-carousel')) document.querySelector('.banner-carousel').style.display = 'block';
-    if(document.querySelector('.hero')) document.querySelector('.hero').style.display = 'block';
-    
     const filtrados = inventario.filter(p => p.categoria.includes(cat));
     renderizar(filtrados);
     toggleMenu();
@@ -206,7 +128,7 @@ async function cargarBanners() {
         const track = document.getElementById('banner-track');
         
         if (!track) return;
-        track.innerHTML = '';
+        track.innerHTML = ''; // Limpia antes de cargar
 
         filas.forEach(f => {
             const imgUrl = f.replace(/"/g, '').trim();
@@ -216,16 +138,18 @@ async function cargarBanners() {
             }
         });
 
+        // Inicia el movimiento solo si hay más de una imagen
         const slides = document.querySelectorAll('.slide');
         if (slides.length > 1) {
             setInterval(() => {
                 currentSlide = (currentSlide + 1) % slides.length;
                 track.style.transform = `translateX(-${currentSlide * 100}%)`;
-            }, 4000); 
+            }, 2000); // Cambia cada 2 segundos
         }
-    } catch (e) { console.error("Error al cargar banners:", e); }
+    } catch (e) { 
+        console.error("Error al cargar banners:", e); 
+    }
 }
-
 function enviarWhatsApp() {
     let msg = `*PEDIDO PIETRA & CO.*\n\n`;
     carrito.forEach(p => msg += `• ${p.nombre} (S/ ${p.precio.toFixed(2)})\n`);
