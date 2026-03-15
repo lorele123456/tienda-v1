@@ -156,34 +156,48 @@ body {
 .cart-item img { width: 60px; height: 60px; object-fit: cover; }
 
 /* --- CARRUSEL FULL WIDTH (FUERA DEL NAVEGADOR) --- */
+/* --- CARRUSEL PARA IMÁGENES COMPLETAS --- */
 .banner-carousel {
-    width: 95%;           /* Ocupa todo el ancho */
-    height: 650px;         /* Altura ideal para que las fotos luzcan */
+    width: 100%;
+    /* Quitamos el height fijo para que la imagen mande */
+    height: auto; 
     overflow: hidden;
     position: relative;
-    background-color: #fff; /* Fondo blanco para que no se confunda con el menú */
-    margin: 0;             /* Sin espacios externos */
+    background-color: #fff;
+    margin: 0;
 }
 
 .carousel-track {
     display: flex;
     width: 100%;
-    height: 100%;
     transition: transform 0.8s cubic-bezier(0.45, 0, 0.55, 1);
 }
 
 .slide {
     min-width: 100%;
-    height: 100%;
+    height: auto;
 }
 
 .slide img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;     /* La imagen llena el espacio sin deformarse */
-    object-position: center; 
+    /* 'contain' asegura que se vea TODA la imagen, 
+       pero 'initial' es mejor si quieres que ocupe todo el ancho */
+    height: auto; 
+    display: block;
+    object-fit: contain; 
 }
 
+/* Ajuste específico para PC para que no ocupe toda la pantalla hacia abajo */
+@media (min-width: 1024px) {
+    .banner-carousel {
+        max-height: 80vh; /* Evita que la foto sea más alta que la pantalla */
+        margin-bottom: 20px;
+    }
+    .slide img {
+        object-fit: cover; /* En PC muy grandes, cover suele verse mejor, pero si quieres la foto íntegra usa 'contain' o 'initial' */
+        max-height: 80vh;
+    }
+}
 /* Ajuste para celulares: el carrusel debe ser más bajo */
 @media (max-width: 600px) {
     .banner-carousel {
