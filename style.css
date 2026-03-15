@@ -157,8 +157,8 @@ body {
 
 /* --- CARRUSEL FULL WIDTH (FUERA DEL NAVEGADOR) --- */
 .banner-carousel {
-    width: 100%;           /* Ocupa todo el ancho */
-    height: 450px;         /* Altura ideal para que las fotos luzcan */
+    width: 95%;           /* Ocupa todo el ancho */
+    height: 650px;         /* Altura ideal para que las fotos luzcan */
     overflow: hidden;
     position: relative;
     background-color: #fff; /* Fondo blanco para que no se confunda con el menú */
@@ -190,6 +190,7 @@ body {
         height: 250px;     /* Altura más cómoda para móvil */
     }
 }
+
 .footer-luxury {
     background-color: #f9f7f2; /* Color crema suave de fondo */
     padding: 60px 20px 30px;
