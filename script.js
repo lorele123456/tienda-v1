@@ -53,31 +53,51 @@ async function obtenerProductos() {
 
 async function cargarMenuExtra() {
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_MENU_EXTRA}&cb=${Date.now()}`;
-    const contenedor = document.getElementById('menu-dinamico-excel');
-    if (!contenedor) return;
+    
+    // Referenciamos los dos nuevos contenedores
+    const contPrimero = document.getElementById('menu-primero-excel');
+    const contResto = document.getElementById('menu-resto-excel');
+    
+    if (!contPrimero || !contResto) return;
 
     try {
         const res = await fetch(url);
         const csv = await res.text();
         const filas = csv.split(/\r?\n/).slice(1);
         
-        let html = '';
-        filas.forEach(f => {
+        let htmlPrimero = '';
+        let htmlResto = '';
+
+        filas.forEach((f, index) => {
             const c = f.split(',').map(x => x.replace(/^"|"$/g, '').trim());
             const nombre = c[0];
             const tipo = c[1] ? c[1].toUpperCase() : '';
             const destino = c[2];
 
             if (nombre && tipo) {
+                let enlaceHtml = '';
                 if (tipo === 'PAGINA') {
-                    html += `<a href="#" class="menu-link" onclick="cargarPaginaTexto('${destino}')">${nombre}</a>`;
+                    enlaceHtml = `<a href="#" class="menu-link" onclick="cargarPaginaTexto('${destino}')">${nombre}</a>`;
                 } else if (tipo === 'LINK') {
-                    html += `<a href="${destino}" target="_blank" class="menu-link">${nombre}</a>`;
+                    enlaceHtml = `<a href="${destino}" target="_blank" class="menu-link">${nombre}</a>`;
+                }
+
+                // SI ES LA PRIMERA FILA (index 0), VA AL CONTENEDOR DE ARRIBA
+                if (index === 0) {
+                    htmlPrimero = enlaceHtml;
+                } else {
+                    // TODAS LAS DEMÁS FILAS VAN AL CONTENEDOR DE ABAJO
+                    htmlResto += enlaceHtml;
                 }
             }
         });
-        contenedor.innerHTML = html;
-    } catch (e) { console.error("Error cargando menú extra:", e); }
+
+        contPrimero.innerHTML = htmlPrimero;
+        contResto.innerHTML = htmlResto;
+
+    } catch (e) { 
+        console.error("Error cargando el menú dividido:", e); 
+    }
 }
 
 async function cargarPaginaTexto(idDestino) {
