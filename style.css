@@ -45,6 +45,30 @@ body { background: var(--crema); color: var(--verde); font-family: 'Montserrat',
 .submenu.show { display: block; }
 .submenu a { color: var(--oro); text-decoration: none; display: block; font-size: 0.9rem; margin-bottom: 15px; text-transform: uppercase; }
 
+/* Este es el contenedor que aparece al dar clic */
+#contenidoPagina {
+    max-width: 800px;      /* Ancho ideal para lectura */
+    margin: 40px auto;     /* Lo centra horizontalmente y le da aire arriba/abajo */
+    padding: 20px;
+    text-align: center;    /* Centra el texto */
+    line-height: 1.6;      /* Hace que los textos largos sean fáciles de leer */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+/* Si tienes títulos dentro de esa información */
+#contenidoPagina h2 {
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Para que los párrafos no se peguen */
+#contenidoPagina p {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
 /* CUADRÍCULA DE PRODUCTOS (PC / LAPTOP) */
 .product-grid {
     display: grid;

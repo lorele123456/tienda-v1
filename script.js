@@ -113,28 +113,45 @@ async function cargarPaginaTexto(idDestino) {
             const [id, titulo, cuerpo, imagen] = filaDatos;
             const cont = document.getElementById('product-list');
             
-            // Ocultamos elementos de la tienda
+            // Ocultamos elementos de la tienda para dar foco al texto
             if(document.querySelector('.banner-carousel')) document.querySelector('.banner-carousel').style.display = 'none';
             if(document.querySelector('.hero')) document.querySelector('.hero').style.display = 'none';
 
             cont.innerHTML = `
-                <div class="pagina-dinamica" style="padding: 40px 5%; max-width: 800px; margin: auto; animation: fadeIn 0.5s ease;">
-                    <h1 style="font-family:'Cormorant Garamond'; font-size: 2.5rem; color: var(--verde); text-align: center;">${titulo}</h1>
-                    <div style="border-top: 1px solid var(--oro); width: 50px; margin: 20px auto 40px;"></div>
-                    ${imagen ? `<img src="${limpiarLink(imagen)}" style="width:100%; border-radius:2px; margin-bottom:30px;">` : ''}
-                    <div style="line-height: 1.8; color: #333; font-size: 1.1rem; text-align: justify; font-family:'Montserrat';">
-                        ${cuerpo ? cuerpo.replace(/\\n/g, '<br>').replace(/\n/g, '<br>') : 'Contenido en edición...'}
+                <div class="pagina-dinamica" style="padding: 60px 5%; max-width: 900px; margin: auto; animation: fadeIn 0.5s ease;">
+                    
+                    <h1 style="font-family:'Cormorant Garamond'; font-size: 2.8rem; color: var(--verde); text-align: center; letter-spacing: 1px;">
+                        ${titulo}
+                    </h1>
+                    
+                    <div style="border-top: 1px solid var(--oro); width: 60px; margin: 20px auto 40px;"></div>
+                    
+                    ${imagen ? `
+                        <img src="${limpiarLink(imagen)}" 
+                             style="max-height: 450px; width: auto; max-width: 100%; display: block; margin: 0 auto 40px; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    ` : ''}
+                    
+                    <div class="cuerpo-texto" style="line-height: 1.9; color: #444; font-size: 1.15rem; text-align: center; max-width: 700px; margin: 0 auto; font-family:'Montserrat';">
+                        ${cuerpo ? cuerpo.split('\\n').map(p => `<p style="margin-bottom:20px;">${p}</p>`).join('') : 'Contenido en edición...'}
                     </div>
-                    <div style="text-align: center; margin-top: 50px;">
-                        <button onclick="window.location.reload()" style="background:var(--verde); color:white; border:none; padding:12px 30px; cursor:pointer; font-family:'Montserrat';">VOLVER A LA TIENDA</button>
+                    
+                    <div style="text-align: center; margin-top: 60px;">
+                        <button onclick="window.location.reload()" 
+                                style="background:var(--verde); color:white; border:none; padding:15px 40px; cursor:pointer; font-family:'Montserrat'; letter-spacing: 2px; font-size: 0.9rem; transition: 0.3s;">
+                            VOLVER A LA TIENDA
+                        </button>
                     </div>
                 </div>
             `;
+            
             window.scrollTo(0,0);
             if(typeof toggleMenu === 'function') toggleMenu();
         }
-    } catch (e) { console.error("Error cargando página de texto:", e); }
+    } catch (e) { 
+        console.error("Error cargando página de texto:", e); 
+    }
 }
+
 async function cargarMenuColecciones() {
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_COLECCIONES}&cb=${Date.now()}`;
     const submenu = document.getElementById('submenu-colecciones');
