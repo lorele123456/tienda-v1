@@ -146,83 +146,14 @@ body {
 .hero { text-align: center; padding: 50px 0; }
 .hero h1 { font-family: 'Cormorant Garamond'; font-size: 2.5rem; font-style: italic; }
 
-/* --- ESTILOS DEL CARRITO PIETRA & CO. --- */
-#carrito-container {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 4px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    max-width: 400px;
-    margin: 20px auto;
-    font-family: 'Montserrat', sans-serif;
-    color: #333;
+/* CARRITO */
+.cart-drawer {
+    position: fixed; right: -100%; top: 0; width: 380px; height: 100%; background: white;
+    z-index: 2000; transition: 0.4s; padding: 25px; display: flex; flex-direction: column;
 }
-
-#carrito-container h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2rem;
-    color: var(--verde);
-    text-align: center;
-    margin-bottom: 25px;
-    border-bottom: 1px solid var(--oro);
-    padding-bottom: 10px;
-}
-
-/* Estilo para las líneas de Subtotal, Envío y Total */
-.carrito-info {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
-}
-
-.carrito-total {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 2px solid #f4f4f4;
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: #1a1a1a;
-}
-
-/* El botón de WhatsApp */
-.btn-whatsapp {
-    background-color: var(--verde);
-    color: white;
-    width: 100%;
-    border: none;
-    padding: 18px;
-    margin-top: 25px;
-    cursor: pointer;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 0.85rem;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.btn-whatsapp:hover {
-    background-color: #2a3d34; /* Un verde un poco más oscuro */
-    transform: translateY(-2px);
-}
-
-/* El botón de cerrar (X) */
-.close-cart {
-    float: right;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #999;
-}
+.cart-drawer.open { right: 0; }
+.cart-item { display: flex; gap: 15px; align-items: center; padding-bottom: 15px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
+.cart-item img { width: 60px; height: 60px; object-fit: cover; }
 
 /* --- CARRUSEL FULL WIDTH (FUERA DEL NAVEGADOR) --- */
 /* --- CARRUSEL PARA IMÁGENES COMPLETAS --- */
