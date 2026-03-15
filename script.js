@@ -105,7 +105,6 @@ async function cargarPaginaTexto(idDestino) {
         const csv = await res.text();
         const filas = csv.split(/\r?\n/).slice(1);
         
-        // Buscamos la fila que coincida con C1, C2, etc.
         const filaDatos = filas.map(f => f.split(',').map(x => x.replace(/^"|"$/g, '').trim()))
                                .find(col => col[0] === idDestino);
 
@@ -113,14 +112,19 @@ async function cargarPaginaTexto(idDestino) {
             const [id, titulo, cuerpo, imagen] = filaDatos;
             const cont = document.getElementById('product-list');
             
-            // Ocultamos elementos de la tienda para dar foco al texto
+            // --- EL TRUCO PARA EL CENTRADO ---
+            // Quitamos la clase 'product-grid' para que no se vea a un costado
+            cont.classList.remove('product-grid');
+            cont.style.display = 'block'; 
+            cont.style.width = '100%';
+
             if(document.querySelector('.banner-carousel')) document.querySelector('.banner-carousel').style.display = 'none';
             if(document.querySelector('.hero')) document.querySelector('.hero').style.display = 'none';
 
             cont.innerHTML = `
-                <div class="pagina-dinamica" style="padding: 60px 5%; max-width: 900px; margin: auto; animation: fadeIn 0.5s ease;">
+                <div class="pagina-dinamica" style="padding: 60px 5%; max-width: 900px; margin: 0 auto; animation: fadeIn 0.5s ease; width: 100%; box-sizing: border-box;">
                     
-                    <h1 style="font-family:'Cormorant Garamond'; font-size: 2.8rem; color: var(--verde); text-align: center; letter-spacing: 1px;">
+                    <h1 style="font-family:'Cormorant Garamond'; font-size: 2.8rem; color: var(--verde); text-align: center; letter-spacing: 1px; margin: 0;">
                         ${titulo}
                     </h1>
                     
@@ -137,7 +141,7 @@ async function cargarPaginaTexto(idDestino) {
                     
                     <div style="text-align: center; margin-top: 60px;">
                         <button onclick="window.location.reload()" 
-                                style="background:var(--verde); color:white; border:none; padding:15px 40px; cursor:pointer; font-family:'Montserrat'; letter-spacing: 2px; font-size: 0.9rem; transition: 0.3s;">
+                                style="background:var(--verde); color:white; border:none; padding:15px 40px; cursor:pointer; font-family:'Montserrat'; letter-spacing: 2px; font-size: 0.9rem;">
                             VOLVER A LA TIENDA
                         </button>
                     </div>
