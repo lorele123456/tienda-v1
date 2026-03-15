@@ -154,6 +154,34 @@ body { background: var(--crema); color: var(--verde); font-family: 'Montserrat',
     padding-top: 20px;
 }
 
+.legal-links {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.reclamaciones-link {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    color: #888;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: color 0.3s;
+}
+
+.reclamaciones-link i {
+    font-size: 1rem;
+    color: var(--oro); /* Un toque dorado para el icono */
+}
+
+.reclamaciones-link:hover {
+    color: var(--verde);
+}
+
 /* --- SECCIÓN RESPONSIVE (CELULARES Y TABLETS) --- */
 
 @media (max-width: 800px) {
