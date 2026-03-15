@@ -105,6 +105,55 @@ body { background: var(--crema); color: var(--verde); font-family: 'Montserrat',
     object-position: center; 
 }
 
+.footer-luxury {
+    background-color: #f9f7f2; /* Color crema suave de fondo */
+    padding: 60px 20px 30px;
+    text-align: center;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 50px;
+}
+
+.footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    letter-spacing: 4px;
+    color: var(--verde); /* Usando el verde de tu marca */
+    margin-bottom: 10px;
+}
+
+.footer-tagline {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 30px;
+}
+
+.social-links {
+    margin-bottom: 40px;
+}
+
+.social-icon {
+    font-size: 1.5rem;
+    color: var(--verde);
+    margin: 0 15px;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.social-icon:hover {
+    color: var(--oro); /* Cambio a color oro al pasar el mouse */
+}
+
+.footer-bottom {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    color: #aaa;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
 /* --- SECCIÓN RESPONSIVE (CELULARES Y TABLETS) --- */
 
 @media (max-width: 800px) {
