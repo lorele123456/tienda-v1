@@ -64,7 +64,7 @@ async function cargarMenuExtra() {
 
         filas.forEach((f, index) => {
             // Limpieza mejorada de comas y comillas
-            const c = f.split(/,(?=(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/"/g, '').trim());
+            const c = f.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/"/g, '').trim());
             const nombre = c[0];
             const tipo = c[1] ? c[1].toUpperCase() : '';
             const destino = c[2];
