@@ -1,6 +1,8 @@
 const SHEET_ID = '1BoWQQk73dRJdH3NTHautP-aixEbDr3uRWgXfmlbUP20';
 const GID_BANNERS = '338089071';
 const GID_COLECCIONES = '1042206871'; // Tu nuevo GID
+const GID_MENU_EXTRA = '804444273';      // Hoja Menu_Principal
+const GID_CONTENIDO = '1199133365';      // Hoja Contenido_Paginas
 const NUMERO_WA = "51987173565";
 const COSTO_ENVIO = 12.00;
 
@@ -21,6 +23,61 @@ async function inicializar() {
     await obtenerProductos();
     await cargarBanners();
     await cargarMenuColecciones();
+    await cargarMenuExtra();
+}
+
+async function cargarMenuExtra() {
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_MENU_EXTRA}&cb=${Date.now()}`;
+    const contenedor = document.getElementById('menu-dinamico-excel');
+    if (!contenedor) return;
+    try {
+        const res = await fetch(url);
+        const csv = await res.text();
+        const filas = csv.split(/\r?\n/).slice(1);
+        let html = '';
+        filas.forEach(f => {
+            const c = f.split(/,(?=(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/"/g, '').trim());
+            if (c[0] && c[1]) {
+                if (c[1].toUpperCase() === 'PAGINA') {
+                    html += `<a href="#" class="menu-link" onclick="cargarPaginaTexto('${c[2]}')">${c[0]}</a>`;
+                } else {
+                    html += `<a href="${c[2]}" target="_blank" class="menu-link">${c[0]}</a>`;
+                }
+            }
+        });
+        contenedor.innerHTML = html;
+    } catch (e) { console.error("Error en menú extra", e); }
+}
+
+async function cargarPaginaTexto(idDestino) {
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_CONTENIDO}&cb=${Date.now()}`;
+    try {
+        const res = await fetch(url);
+        const csv = await res.text();
+        const filas = csv.split(/\r?\n/).slice(1);
+        const datos = filas.map(f => f.split(/,(?=(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/"/g, '')))
+                          .find(col => col[0] === idDestino);
+        if (datos) {
+            const [id, titulo, cuerpo, imagen] = datos;
+            const cont = document.getElementById('product-list');
+            if(document.querySelector('.banner-carousel')) document.querySelector('.banner-carousel').style.display = 'none';
+            if(document.querySelector('.hero')) document.querySelector('.hero').style.display = 'none';
+            cont.innerHTML = `
+                <div class="pagina-dinamica" style="padding: 40px 5%; max-width: 800px; margin: auto;">
+                    <h1 style="font-family:'Cormorant Garamond'; font-size: 2.8rem; color: var(--verde); text-align: center;">${titulo}</h1>
+                    <div style="border-top: 1px solid var(--oro); width: 50px; margin: 20px auto 40px;"></div>
+                    ${imagen ? `<img src="${limpiarLink(imagen)}" style="width:100%; margin-bottom:30px;">` : ''}
+                    <div style="line-height: 1.8; color: #333; font-size: 1.1rem; text-align: justify;">
+                        ${cuerpo.replace(/\n/g, '<br>')}
+                    </div>
+                    <div style="text-align: center; margin-top: 50px;">
+                        <button onclick="window.location.reload()" style="background:var(--verde); color:white; border:none; padding:12px 25px; cursor:pointer;">VOLVER A LA TIENDA</button>
+                    </div>
+                </div>`;
+            window.scrollTo(0,0);
+            toggleMenu();
+        }
+    } catch (e) { console.error("Error en página texto", e); }
 }
 
 async function obtenerProductos() {
@@ -81,6 +138,10 @@ function ejecutarBusqueda() {
 }
 
 function filtrarCategoria(cat) {
+    // Aseguramos que el banner y hero se vean de nuevo
+    if(document.querySelector('.banner-carousel')) document.querySelector('.banner-carousel').style.display = 'block';
+    if(document.querySelector('.hero')) document.querySelector('.hero').style.display = 'block';
+    
     const filtrados = inventario.filter(p => p.categoria.includes(cat));
     renderizar(filtrados);
     toggleMenu();
