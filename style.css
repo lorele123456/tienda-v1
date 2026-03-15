@@ -5,6 +5,49 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: var(--crema); color: var(--verde); font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
 
+/* Caja superior para el nombre */
+.main-header {
+    background-color: #ffffff; /* Fondo limpio */
+    padding: 20px 10px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--verde); /* Usando tu color de marca */
+    margin: 0;
+    letter-spacing: 4px;
+    font-weight: 500;
+}
+
+.brand-slogan {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    color: var(--oro); /* El toque dorado */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 5px;
+}
+
+/* Ajuste para que el buscador no se pegue al header */
+.search-container, #buscador {
+    margin-top: 15px !important;
+}
+
+/* Optimización para Celulares */
+@media (max-width: 600px) {
+    .brand-name {
+        font-size: 1.4rem; /* Un poco más pequeño en móvil */
+        letter-spacing: 3px;
+    }
+    .main-header {
+        padding: 15px 5px;
+    }
+}
 /* NAVBAR */
 .navbar-luxury {
     background: var(--verde); height: 85px; display: flex; align-items: center; justify-content: space-between;
