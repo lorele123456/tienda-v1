@@ -26,27 +26,34 @@ async function inicializar() {
     await cargarMenuExtra();
 }
 
+// REEMPLAZA cargarMenuExtra con esta:
 async function cargarMenuExtra() {
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_MENU_EXTRA}&cb=${Date.now()}`;
     const contenedor = document.getElementById('menu-dinamico-excel');
     if (!contenedor) return;
+
     try {
         const res = await fetch(url);
         const csv = await res.text();
         const filas = csv.split(/\r?\n/).slice(1);
+        
         let html = '';
         filas.forEach(f => {
-            const c = f.split(/,(?=(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/"/g, '').trim());
-            if (c[0] && c[1]) {
-                if (c[1].toUpperCase() === 'PAGINA') {
-                    html += `<a href="#" class="menu-link" onclick="cargarPaginaTexto('${c[2]}')">${c[0]}</a>`;
-                } else {
-                    html += `<a href="${c[2]}" target="_blank" class="menu-link">${c[0]}</a>`;
+            const c = f.split(',').map(x => x.replace(/^"|"$/g, '').trim());
+            const nombre = c[0];
+            const tipo = c[1] ? c[1].toUpperCase() : '';
+            const destino = c[2];
+
+            if (nombre && tipo) {
+                if (tipo === 'PAGINA') {
+                    html += `<a href="#" class="menu-link" onclick="cargarPaginaTexto('${destino}')">${nombre}</a>`;
+                } else if (tipo === 'LINK') {
+                    html += `<a href="${destino}" target="_blank" class="menu-link">${nombre}</a>`;
                 }
             }
         });
         contenedor.innerHTML = html;
-    } catch (e) { console.error("Error en menú extra", e); }
+    } catch (e) { console.error("Error menú:", e); }
 }
 
 async function cargarPaginaTexto(idDestino) {
@@ -80,18 +87,29 @@ async function cargarPaginaTexto(idDestino) {
     } catch (e) { console.error("Error en página texto", e); }
 }
 
+
+
 async function obtenerProductos() {
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&cb=${Date.now()}`;
     try {
         const res = await fetch(url);
         const csv = await res.text();
         const filas = csv.split(/\r?\n/).slice(1);
+        
         inventario = filas.map(f => {
-            const c = f.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/^"|"$/g, '').trim());
-            return { id: c[0], nombre: c[1], precio: parseFloat(c[2]) || 0, imagen: limpiarLink(c[4]), categoria: (c[5]||'').toLowerCase() };
+            // Dividimos por coma de forma simple
+            const c = f.split(',').map(x => x.replace(/^"|"$/g, '').trim());
+            return { 
+                id: c[0], 
+                nombre: c[1], 
+                precio: parseFloat(c[2]) || 0, 
+                imagen: limpiarLink(c[4]), 
+                categoria: (c[5]||'').toLowerCase() 
+            };
         }).filter(p => p.nombre);
+        
         renderizar(inventario);
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error("Error productos:", e); }
 }
 
 async function cargarMenuColecciones() {
