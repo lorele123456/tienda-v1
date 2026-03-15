@@ -27,6 +27,30 @@ async function inicializar() {
 }
 
 // REEMPLAZA cargarMenuExtra con esta:
+// Versión limpia sin expresiones regulares complejas
+async function obtenerProductos() {
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&cb=${Date.now()}`;
+    try {
+        const res = await fetch(url);
+        const csv = await res.text();
+        const filas = csv.split(/\r?\n/).slice(1);
+        
+        inventario = filas.map(f => {
+            // Separación simple por coma y limpieza de comillas
+            const c = f.split(',').map(x => x.replace(/^"|"$/g, '').trim());
+            return { 
+                id: c[0], 
+                nombre: c[1], 
+                precio: parseFloat(c[2]) || 0, 
+                imagen: limpiarLink(c[4]), 
+                categoria: (c[5]||'').toLowerCase() 
+            };
+        }).filter(p => p.nombre);
+        
+        renderizar(inventario);
+    } catch (e) { console.error("Error cargando productos:", e); }
+}
+
 async function cargarMenuExtra() {
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_MENU_EXTRA}&cb=${Date.now()}`;
     const contenedor = document.getElementById('menu-dinamico-excel');
@@ -53,7 +77,7 @@ async function cargarMenuExtra() {
             }
         });
         contenedor.innerHTML = html;
-    } catch (e) { console.error("Error menú:", e); }
+    } catch (e) { console.error("Error cargando menú extra:", e); }
 }
 
 async function cargarPaginaTexto(idDestino) {
@@ -62,56 +86,37 @@ async function cargarPaginaTexto(idDestino) {
         const res = await fetch(url);
         const csv = await res.text();
         const filas = csv.split(/\r?\n/).slice(1);
-        const datos = filas.map(f => f.split(/,(?=(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/"/g, '')))
-                          .find(col => col[0] === idDestino);
-        if (datos) {
-            const [id, titulo, cuerpo, imagen] = datos;
+        
+        // Buscamos la fila que coincida con C1, C2, etc.
+        const filaDatos = filas.map(f => f.split(',').map(x => x.replace(/^"|"$/g, '').trim()))
+                               .find(col => col[0] === idDestino);
+
+        if (filaDatos) {
+            const [id, titulo, cuerpo, imagen] = filaDatos;
             const cont = document.getElementById('product-list');
+            
+            // Ocultamos elementos de la tienda
             if(document.querySelector('.banner-carousel')) document.querySelector('.banner-carousel').style.display = 'none';
             if(document.querySelector('.hero')) document.querySelector('.hero').style.display = 'none';
+
             cont.innerHTML = `
-                <div class="pagina-dinamica" style="padding: 40px 5%; max-width: 800px; margin: auto;">
-                    <h1 style="font-family:'Cormorant Garamond'; font-size: 2.8rem; color: var(--verde); text-align: center;">${titulo}</h1>
+                <div class="pagina-dinamica" style="padding: 40px 5%; max-width: 800px; margin: auto; animation: fadeIn 0.5s ease;">
+                    <h1 style="font-family:'Cormorant Garamond'; font-size: 2.5rem; color: var(--verde); text-align: center;">${titulo}</h1>
                     <div style="border-top: 1px solid var(--oro); width: 50px; margin: 20px auto 40px;"></div>
-                    ${imagen ? `<img src="${limpiarLink(imagen)}" style="width:100%; margin-bottom:30px;">` : ''}
-                    <div style="line-height: 1.8; color: #333; font-size: 1.1rem; text-align: justify;">
-                        ${cuerpo.replace(/\n/g, '<br>')}
+                    ${imagen ? `<img src="${limpiarLink(imagen)}" style="width:100%; border-radius:2px; margin-bottom:30px;">` : ''}
+                    <div style="line-height: 1.8; color: #333; font-size: 1.1rem; text-align: justify; font-family:'Montserrat';">
+                        ${cuerpo ? cuerpo.replace(/\\n/g, '<br>').replace(/\n/g, '<br>') : 'Contenido en edición...'}
                     </div>
                     <div style="text-align: center; margin-top: 50px;">
-                        <button onclick="window.location.reload()" style="background:var(--verde); color:white; border:none; padding:12px 25px; cursor:pointer;">VOLVER A LA TIENDA</button>
+                        <button onclick="window.location.reload()" style="background:var(--verde); color:white; border:none; padding:12px 30px; cursor:pointer; font-family:'Montserrat';">VOLVER A LA TIENDA</button>
                     </div>
-                </div>`;
+                </div>
+            `;
             window.scrollTo(0,0);
-            toggleMenu();
+            if(typeof toggleMenu === 'function') toggleMenu();
         }
-    } catch (e) { console.error("Error en página texto", e); }
+    } catch (e) { console.error("Error cargando página de texto:", e); }
 }
-
-
-
-async function obtenerProductos() {
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&cb=${Date.now()}`;
-    try {
-        const res = await fetch(url);
-        const csv = await res.text();
-        const filas = csv.split(/\r?\n/).slice(1);
-        
-        inventario = filas.map(f => {
-            // Dividimos por coma de forma simple
-            const c = f.split(',').map(x => x.replace(/^"|"$/g, '').trim());
-            return { 
-                id: c[0], 
-                nombre: c[1], 
-                precio: parseFloat(c[2]) || 0, 
-                imagen: limpiarLink(c[4]), 
-                categoria: (c[5]||'').toLowerCase() 
-            };
-        }).filter(p => p.nombre);
-        
-        renderizar(inventario);
-    } catch (e) { console.error("Error productos:", e); }
-}
-
 async function cargarMenuColecciones() {
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_COLECCIONES}&cb=${Date.now()}`;
     const submenu = document.getElementById('submenu-colecciones');
