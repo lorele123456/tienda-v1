@@ -121,32 +121,35 @@ async function cargarPaginaTexto(idDestino) {
             if(document.querySelector('.banner-carousel')) document.querySelector('.banner-carousel').style.display = 'none';
             if(document.querySelector('.hero')) document.querySelector('.hero').style.display = 'none';
 
-            cont.innerHTML = `
-                <div class="pagina-dinamica" style="padding: 60px 5%; max-width: 900px; margin: 0 auto; animation: fadeIn 0.5s ease; width: 100%; box-sizing: border-box;">
-                    
-                    <h1 style="font-family:'Cormorant Garamond'; font-size: 2.8rem; color: var(--verde); text-align: center; letter-spacing: 1px; margin: 0;">
-                        ${titulo}
-                    </h1>
-                    
-                    <div style="border-top: 1px solid var(--oro); width: 60px; margin: 20px auto 40px;"></div>
-                    
-                    ${imagen ? `
-                        <img src="${limpiarLink(imagen)}" 
-                             style="max-height: 450px; width: auto; max-width: 100%; display: block; margin: 0 auto 40px; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                    ` : ''}
-                    
-                    <div class="cuerpo-texto" style="line-height: 1.9; color: #444; font-size: 1.15rem; text-align: center; max-width: 700px; margin: 0 auto; font-family:'Montserrat';">
-                        ${cuerpo ? cuerpo.split('\\n').map(p => `<p style="margin-bottom:20px;">${p}</p>`).join('') : 'Contenido en edición...'}
-                    </div>
-                    
-                    <div style="text-align: center; margin-top: 60px;">
-                        <button onclick="window.location.reload()" 
-                                style="background:var(--verde); color:white; border:none; padding:15px 40px; cursor:pointer; font-family:'Montserrat'; letter-spacing: 2px; font-size: 0.9rem;">
-                            VOLVER A LA TIENDA
-                        </button>
-                    </div>
-                </div>
-            `;
+          cont.innerHTML = `
+    <div class="pagina-dinamica" style="padding: 60px 5%; max-width: 900px; margin: 0 auto; animation: fadeIn 0.5s ease; width: 100%; box-sizing: border-box;">
+        
+        <h1 style="font-family:'Cormorant Garamond'; font-size: 2.8rem; color: var(--verde); text-align: center; letter-spacing: 1px; margin: 0;">
+            ${titulo}
+        </h1>
+        
+        <div style="border-top: 1px solid var(--oro); width: 60px; margin: 20px auto 40px;"></div>
+        
+        ${imagen ? `<img src="${limpiarLink(imagen)}" style="max-height: 400px; width: auto; max-width: 100%; display: block; margin: 0 auto 40px; border-radius: 4px;">` : ''}
+        
+        <div class="cuerpo-texto" style="line-height: 1.8; color: #444; font-size: 1.1rem; text-align: center; max-width: 700px; margin: 0 auto; font-family:'Montserrat';">
+            ${cuerpo ? cuerpo.split('\\n').map(p => {
+                // Si el párrafo contiene ":" lo ponemos en negrita antes del punto
+                if(p.includes(':')) {
+                    let partes = p.split(':');
+                    return `<p style="margin-bottom:25px;"><strong>${partes[0]}:</strong>${partes[1]}</p>`;
+                }
+                return `<p style="margin-bottom:25px;">${p}</p>`;
+            }).join('') : 'Contenido en edición...'}
+        </div>
+        
+        <div style="text-align: center; margin-top: 60px;">
+            <button onclick="window.location.reload()" style="background:var(--verde); color:white; border:none; padding:15px 40px; cursor:pointer; font-family:'Montserrat'; letter-spacing: 2px; text-transform: uppercase;">
+                Volver a la tienda
+            </button>
+        </div>
+    </div>
+`;
             
             window.scrollTo(0,0);
             if(typeof toggleMenu === 'function') toggleMenu();
