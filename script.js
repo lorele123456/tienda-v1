@@ -54,12 +54,6 @@ async function obtenerProductos() {
 async function cargarMenuExtra() {
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_MENU_EXTRA}&cb=${Date.now()}`;
     
-    // Referenciamos los dos nuevos contenedores
-    const contPrimero = document.getElementById('menu-primero-excel');
-    const contResto = document.getElementById('menu-resto-excel');
-    
-    if (!contPrimero || !contResto) return;
-
     try {
         const res = await fetch(url);
         const csv = await res.text();
@@ -69,34 +63,38 @@ async function cargarMenuExtra() {
         let htmlResto = '';
 
         filas.forEach((f, index) => {
-            const c = f.split(',').map(x => x.replace(/^"|"$/g, '').trim());
+            // Limpieza mejorada de comas y comillas
+            const c = f.split(/,(?=(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/"/g, '').trim());
             const nombre = c[0];
             const tipo = c[1] ? c[1].toUpperCase() : '';
             const destino = c[2];
 
             if (nombre && tipo) {
-                let enlaceHtml = '';
+                let enlace = '';
                 if (tipo === 'PAGINA') {
-                    enlaceHtml = `<a href="#" class="menu-link" onclick="cargarPaginaTexto('${destino}')">${nombre}</a>`;
+                    enlace = `<a href="#" class="menu-link" onclick="cargarPaginaTexto('${destino}')">${nombre}</a>`;
                 } else if (tipo === 'LINK') {
-                    enlaceHtml = `<a href="${destino}" target="_blank" class="menu-link">${nombre}</a>`;
+                    enlace = `<a href="${destino}" target="_blank" class="menu-link">${nombre}</a>`;
                 }
 
-                // SI ES LA PRIMERA FILA (index 0), VA AL CONTENEDOR DE ARRIBA
+                // Distribución
                 if (index === 0) {
-                    htmlPrimero = enlaceHtml;
+                    htmlPrimero = enlace;
                 } else {
-                    // TODAS LAS DEMÁS FILAS VAN AL CONTENEDOR DE ABAJO
-                    htmlResto += enlaceHtml;
+                    htmlResto += enlace;
                 }
             }
         });
 
-        contPrimero.innerHTML = htmlPrimero;
-        contResto.innerHTML = htmlResto;
+        // Inyectamos en los contenedores
+        const pContainer = document.getElementById('menu-primero-excel');
+        const rContainer = document.getElementById('menu-resto-excel');
+        
+        if (pContainer) pContainer.innerHTML = htmlPrimero;
+        if (rContainer) rContainer.innerHTML = htmlResto;
 
-    } catch (e) { 
-        console.error("Error cargando el menú dividido:", e); 
+    } catch (e) {
+        console.error("Error cargando el menú del Excel:", e);
     }
 }
 
