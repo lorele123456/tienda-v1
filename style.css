@@ -7,12 +7,24 @@ body { background: var(--crema); color: var(--verde); font-family: 'Montserrat',
 
 /* Caja superior para el nombre */
 .main-header {
-    background-color: #ffffff; /* Fondo limpio */
-    padding: 20px 10px;
+    background-color: #ffffff;
+    padding: 15px 10px;
     text-align: center;
     border-bottom: 1px solid #f0f0f0;
     width: 100%;
     box-sizing: border-box;
+    
+    /* Esto lo mantiene fijo arriba */
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Para que siempre esté por encima de las fotos y productos */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* Una sombra sutil para dar profundidad */
+}
+
+/* Ajuste para que el resto del contenido no se vea cortado al empezar */
+body {
+    margin: 0;
+    padding: 0;
 }
 
 .brand-name {
