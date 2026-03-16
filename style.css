@@ -146,14 +146,126 @@ body {
 .hero { text-align: center; padding: 50px 0; }
 .hero h1 { font-family: 'Cormorant Garamond'; font-size: 2.5rem; font-style: italic; }
 
-/* CARRITO */
+/* --- ESTILOS DE LUJO PARA EL CARRITO (PIETRA & CO.) --- */
+
+/* 1. Ajuste del contenedor principal */
 .cart-drawer {
-    position: fixed; right: -100%; top: 0; width: 380px; height: 100%; background: white;
-    z-index: 2000; transition: 0.4s; padding: 25px; display: flex; flex-direction: column;
+    box-shadow: -8px 0 30px rgba(0,0,0,0.1);
+    border-left: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
 }
-.cart-drawer.open { right: 0; }
-.cart-item { display: flex; gap: 15px; align-items: center; padding-bottom: 15px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
-.cart-item img { width: 60px; height: 60px; object-fit: cover; }
+
+/* 2. Título elegante */
+.cart-drawer h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--verde);
+    text-align: center;
+    letter-spacing: 1px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--oro);
+    margin-bottom: 20px;
+}
+
+/* 3. Items con estética de boutique */
+.cart-item {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.cart-item img {
+    width: 70px;
+    height: 70px;
+    border-radius: 2px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Contenedor de nombre y precio */
+.cart-item div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cart-item p:first-child {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.cart-item p:last-child {
+    font-family: 'Montserrat', sans-serif;
+    color: #888;
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+/* 4. Pie del carrito (Totales) */
+.cart-footer {
+    margin-top: auto; /* Lo empuja siempre al fondo */
+    padding-top: 20px;
+    border-top: 2px solid #f4f4f4;
+}
+
+.cart-footer p {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    margin: 8px 0;
+    color: #555;
+}
+
+/* Estilo para el TOTAL */
+#total-final, 
+.cart-footer p:last-of-type {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #000;
+    margin-top: 15px;
+}
+
+/* 5. Botón de WhatsApp Premium */
+.cart-drawer button:last-of-type {
+    background-color: var(--verde) !important;
+    color: white !important;
+    width: 100%;
+    border: none;
+    padding: 18px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.cart-drawer button:last-of-type:hover {
+    background-color: #2a3d34 !important;
+    letter-spacing: 3px;
+}
+
+/* Estilo para los botones de eliminar si usas texto */
+.cart-item button {
+    background: none;
+    border: none;
+    color: #bb9457; /* Color Oro */
+    font-family: 'Montserrat';
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
 /* --- CARRUSEL FULL WIDTH (FUERA DEL NAVEGADOR) --- */
 /* --- CARRUSEL PARA IMÁGENES COMPLETAS --- */
