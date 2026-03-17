@@ -36,14 +36,15 @@ async function obtenerProductos() {
         const filas = csv.split(/\r?\n/).slice(1);
         
         inventario = filas.map(f => {
-            // Separación simple por coma y limpieza de comillas
-            const c = f.split(',').map(x => x.replace(/^"|"$/g, '').trim());
+            const c = f.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(x => x.replace(/^"|"$/g, '').trim());
             return { 
                 id: c[0], 
                 nombre: c[1], 
                 precio: parseFloat(c[2]) || 0, 
+                detalles: c[3] || '', // Nueva: Columna D
                 imagen: limpiarLink(c[4]), 
-                categoria: (c[5]||'').toLowerCase() 
+                categoria: (c[5]||'').toLowerCase(),
+                precioAnterior: parseFloat(c[6]) || 0 // Nueva: Columna G
             };
         }).filter(p => p.nombre);
         
@@ -179,18 +180,32 @@ function renderizar(lista) {
     cont.innerHTML = '';
     lista.forEach(p => {
         const esFav = favoritos.includes(p.id);
+        
+        // Lógica de Descuento
+        let badgeDescuento = '';
+        if (p.precioAnterior > p.precio) {
+            const porcentaje = Math.round((1 - (p.precio / p.precioAnterior)) * 100);
+            badgeDescuento = `<span class="discount-badge">-${porcentaje}%</span>`;
+        }
+
         cont.innerHTML += `
             <div class="product-card">
                 <div class="img-container">
                     <div class="fav-btn-item ${esFav ? 'active' : ''}" onclick="toggleFavorito('${p.id}')">
                         ${esFav ? '❤️' : '♡'}
                     </div>
+                    ${badgeDescuento}
                     <img src="${p.imagen}" onerror="this.src='https://placehold.co/400x600?text=PIETRA+&CO.'">
                 </div>
-                <div class="product-info" style="padding-top:15px;">
-                    <h3 style="font-family:'Cormorant Garamond';">${p.nombre}</h3>
-                    <p style="color:var(--oro); font-weight:bold;">S/ ${p.precio.toFixed(2)}</p>
-                    <button class="btn-add" onclick="agregarCarrito('${p.id}')" style="width:100%; padding:10px; background:var(--verde); color:white; border:none; cursor:pointer; margin-top:10px;">Añadir</button>
+                <div class="product-info" style="padding-top:15px; text-align:left;">
+                    <span class="brand-tag-card">PIETRA & CO.</span>
+                    <h3 style="font-family:'Cormorant Garamond'; font-size:1.3rem; margin-bottom:5px;">${p.nombre}</h3>
+                    <p style="font-size:0.8rem; color:#777; margin-bottom:10px;">${p.detalles}</p>
+                    <div class="price-wrapper" style="display:flex; align-items:center; gap:10px;">
+                        <span style="color:var(--verde); font-weight:bold; font-size:1.1rem;">S/ ${p.precio.toFixed(2)}</span>
+                        ${p.precioAnterior > 0 ? `<span style="text-decoration:line-through; color:#aaa; font-size:0.85rem;">S/ ${p.precioAnterior.toFixed(2)}</span>` : ''}
+                    </div>
+                    <button class="btn-add-luxury" onclick="agregarCarrito('${p.id}')">Añadir a selección</button>
                 </div>
             </div>`;
     });

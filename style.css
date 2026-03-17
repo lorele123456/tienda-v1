@@ -470,3 +470,48 @@ body {
         margin-bottom: -1px; /* Truco para "pegar" las secciones */
     }
 }
+
+/* =================================RA
+   SECCIÓN DE PRODUCTOS: ESTILO PIETRA & CO.
+   ================================= */
+
+.brand-tag-card {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    color: #999;
+    text-transform: uppercase;
+    display: block;
+}
+
+.discount-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: #e60023;
+    color: white;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    z-index: 10;
+    border-radius: 2px;
+}
+
+.btn-add-luxury {
+    width: 100%;
+    padding: 12px;
+    background: var(--verde);
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 15px;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-add-luxury:hover {
+    background: #234d44;
+}
