@@ -102,13 +102,16 @@ body {
 
 /* Este es el contenedor que aparece al dar clic */
 #contenidoPagina {
-    max-width: 800px;      /* Ancho ideal para lectura */
-    margin: 40px auto;     /* Lo centra horizontalmente y le da aire arriba/abajo */
+    max-width: 800px;
+    margin: 40px auto;
     padding: 20px;
-    text-align: center;    /* Centra el texto */
-    line-height: 1.6;      /* Hace que los textos largos sean fáciles de leer */
+    text-align: center;
+    line-height: 1.6;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333;
+    /* AÑADE ESTO: */
+    height: auto !important; 
+    display: block !important;
 }
 
 /* Si tienes títulos dentro de esa información */
@@ -552,8 +555,9 @@ body {
     color: #555;
     line-height: 1.5;
     padding: 15px 5px 10px;
-    max-height: 250px; /* Si el texto es GIGANTE, permite scroll interno */
-    overflow-y: auto;
+    /* CAMBIA ESTO: */
+    max-height: none !important; /* Elimina el límite de altura */
+    overflow-y: visible !important; /* Quita el scroll interno */
     background: #fafafa;
     margin-top: 5px;
     border-radius: 4px;
