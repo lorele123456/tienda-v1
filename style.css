@@ -515,3 +515,55 @@ body {
 .btn-add-luxury:hover {
     background: #234d44;
 }
+
+/* --- ESTILO PARA DETALLES EXTENSOS --- */
+.custom-details {
+    margin-top: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 8px;
+}
+
+.custom-details summary {
+    font-size: 0.75rem;
+    color: var(--oro);
+    cursor: pointer;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Añadimos un pequeño "+" al final de la palabra Detalles */
+.custom-details summary::after {
+    content: '+';
+    font-size: 1.1rem;
+    font-weight: 300;
+}
+
+.custom-details[open] summary::after {
+    content: '−'; /* Cambia a signo menos cuando se abre */
+}
+
+.detalles-contenido {
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.5;
+    padding: 15px 5px 10px;
+    max-height: 250px; /* Si el texto es GIGANTE, permite scroll interno */
+    overflow-y: auto;
+    background: #fafafa;
+    margin-top: 5px;
+    border-radius: 4px;
+}
+
+/* Scrollbar sutil para los detalles largos */
+.detalles-contenido::-webkit-scrollbar {
+    width: 4px;
+}
+.detalles-contenido::-webkit-scrollbar-thumb {
+    background: #e0e0e0;
+    border-radius: 10px;
+}
