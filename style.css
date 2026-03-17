@@ -327,81 +327,101 @@ body {
     }
 }
 
-.footer-luxury {
-    background-color: #f9f7f2; /* Color crema suave de fondo */
-    padding: 60px 20px 30px;
-    text-align: center;
-    border-top: 1px solid #e0e0e0;
-    margin-top: 50px;
+/* --- ESTILO FINAL FOOTER PIETRA --- */
+.main-footer {
+    background-color: #fcfbf9;
+    padding: 60px 20px 20px;
+    border-top: 1px solid #eee;
+    font-family: 'Montserrat', sans-serif;
+    color: #333;
+}
+
+.footer-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 40px;
 }
 
 .footer-logo {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 2rem;
-    letter-spacing: 4px;
-    color: var(--verde); /* Usando el verde de tu marca */
-    margin-bottom: 10px;
+    font-size: 1.8rem;
+    color: #1a3c34; /* Tu color verde */
+    margin-bottom: 15px;
+    letter-spacing: 2px;
 }
 
-.footer-tagline {
-    font-family: 'Montserrat', sans-serif;
+.footer-section h5 {
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #888;
-    margin-bottom: 30px;
-}
-
-.social-links {
-    margin-bottom: 40px;
-}
-
-.social-icon {
-    font-size: 1.5rem;
-    color: var(--verde);
-    margin: 0 15px;
-    transition: color 0.3s ease;
-    text-decoration: none;
-}
-
-.social-icon:hover {
-    color: var(--oro); /* Cambio a color oro al pasar el mouse */
-}
-
-.footer-bottom {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.7rem;
-    color: #aaa;
-    border-top: 1px solid #eee;
-    padding-top: 20px;
-}
-
-.legal-links {
-    margin-top: 20px;
     margin-bottom: 20px;
 }
 
-.reclamaciones-link {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.75rem;
-    color: #888;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+/* Enlaces sin decoración */
+.footer-nav-simple {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: color 0.3s;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.reclamaciones-link i {
-    font-size: 1rem;
-    color: var(--oro); /* Un toque dorado para el icono */
+.footer-nav-simple a {
+    text-decoration: none;
+    color: #666;
+    font-size: 0.9rem;
+    transition: 0.3s;
 }
 
-.reclamaciones-link:hover {
-    color: var(--verde);
+.footer-nav-simple a:hover {
+    color: #1a3c34;
+}
+
+/* Iconos Sociales */
+.social-flex {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.social-flex a {
+    color: #333;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.social-flex a:hover {
+    color: #1a3c34;
+    transform: translateY(-3px);
+}
+
+/* Libro de Reclamaciones */
+.img-libro {
+    width: 110px;
+    filter: grayscale(1);
+    opacity: 0.7;
+    transition: 0.3s;
+}
+
+.img-libro:hover {
+    filter: grayscale(0);
+    opacity: 1;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    font-size: 0.7rem;
+    color: #aaa;
+}
+
+/* Ajuste Celulares */
+@media (max-width: 768px) {
+    .footer-container { grid-template-columns: 1fr; text-align: center; }
+    .footer-nav-simple, .social-flex { align-items: center; justify-content: center; }
 }
 
 /* --- SECCIÓN RESPONSIVE (CELULARES Y TABLETS) --- */
