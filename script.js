@@ -216,7 +216,7 @@ function renderizar(lista) {
                         <span style="color:var(--verde); font-weight:bold; font-size:1.2rem;">S/ ${p.precio.toFixed(2)}</span>
                         ${p.precioAnterior > p.precio ? `<span style="text-decoration:line-through; color:#aaa; font-size:0.9rem;">S/ ${p.precioAnterior.toFixed(2)}</span>` : ''}
                     </div>
-                    <button class="btn-add-luxury" onclick="agregarCarrito('${p.id}')">Añadir a selección</button>
+                    <button class="btn-add-luxury" onclick="agregarCarrito('${p.id}')">Agregar</button>
                 </div>
             </div>`;
     });
