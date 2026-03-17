@@ -446,3 +446,27 @@ body {
         width: 100%; /* Carrito ocupa toda la pantalla en celular */
     }
 }
+
+/* --- AJUSTE PARA MÓVIL: ELIMINAR ESPACIO BLANCO --- */
+@media (max-width: 768px) {
+    /* Quitamos espacios del banner */
+    .banner-carousel {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+        height: auto; /* Permite que el banner se ajuste al contenido */
+    }
+
+    /* Quitamos espacios de la sección que sigue (Minimalismo Artesanal) */
+    /* Ajusta el nombre de la clase si tu sección tiene otro nombre */
+    section.minimalismo-artesanal, 
+    .intro-text-section {
+        margin-top: 0 !important;
+        padding-top: 30px !important; /* Un respiro pequeño pero no un hueco gigante */
+    }
+
+    /* Ajuste de la imagen del slide para que no deje aire abajo */
+    .slide img {
+        display: block;
+        margin-bottom: -1px; /* Truco para "pegar" las secciones */
+    }
+}
