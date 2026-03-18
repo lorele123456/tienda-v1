@@ -220,43 +220,45 @@ function renderizar(lista) {
                 </div>
             </div>`;
     });
-}function renderizar(lista) {
+}
+function renderizar(lista) {
     const cont = document.getElementById('product-list');
+    if (!cont) return; // Seguridad para no romper la carga
+    
     cont.innerHTML = '';
     
     lista.forEach(p => {
         const esFav = favoritos.includes(p.id);
         
         // --- LÓGICA DE AGOTADO ---
-        // Asumimos que si el precio es 0, está agotado.
-        // Si tienes una columna de Stock, puedes usar: if (p.stock === 0)
         let flagAgotado = '';
         let botonCart = `<button class="btn-add-luxury" onclick="agregarCarrito('${p.id}')">Añadir a selección</button>`;
         
-        if (p.precio === 0) {
+        // Si el precio es 0 o menor, se marca como agotado
+        if (!p.precio || p.precio <= 0) {
             flagAgotado = `<div class="sold-out-overlay"><span>AGOTADO</span></div>`;
-            botonCart = `<button class="btn-add-luxury sold-out-btn" disabled>Temporalmente Agotado</button>`;
+            botonCart = `<button class="btn-add-luxury sold-out-btn" disabled style="background:#bbb !important; cursor:not-allowed;">Agotado</button>`;
         }
 
-        // --- LÓGICA DE DESCUENTO (Solo si no está agotado) ---
+        // --- LÓGICA DE DESCUENTO ---
         let badgeDescuento = '';
         if (p.precioAnterior > p.precio && p.precio > 0) {
             const porcentaje = Math.round((1 - (p.precio / p.precioAnterior)) * 100);
             badgeDescuento = `<span class="discount-badge">-${porcentaje}%</span>`;
         }
 
-        const detallesFormateados = p.detalles.split('\n').map(linea => `<p style="margin-bottom:8px;">${linea}</p>`).join('');
+        // Formateo de detalles seguro
+        const detallesTexto = p.detalles || "Pieza artesanal de ecoresina.";
+        const detallesFormateados = detallesTexto.split('\n').map(linea => `<p style="margin-bottom:8px;">${linea}</p>`).join('');
 
         cont.innerHTML += `
-            <div class="product-card ${p.precio === 0 ? 'product-sold-out' : ''}">
+            <div class="product-card ${(!p.precio || p.precio <= 0) ? 'product-sold-out' : ''}">
                 <div class="img-container">
                     <div class="fav-btn-item ${esFav ? 'active' : ''}" onclick="toggleFavorito('${p.id}')">
                         ${esFav ? '❤️' : '♡'}
                     </div>
                     ${badgeDescuento}
-                    
                     ${flagAgotado}
-                    
                     <img src="${p.imagen}" onerror="this.src='https://placehold.co/400x600?text=PIETRA+&CO.'">
                 </div>
                 <div class="product-info" style="padding-top:15px; text-align:left;">
@@ -271,10 +273,9 @@ function renderizar(lista) {
                     </details>
 
                     <div class="price-wrapper" style="display:flex; align-items:center; gap:10px; margin: 15px 0;">
-                        <span style="color:var(--verde); font-weight:bold; font-size:1.2rem;">${p.precio > 0 ? 'S/ ' + p.precio.toFixed(2) : 'Consultar Stock'}</span>
+                        <span style="color:var(--verde); font-weight:bold; font-size:1.2rem;">${p.precio > 0 ? 'S/ ' + p.precio.toFixed(2) : 'Próximamente'}</span>
                         ${(p.precioAnterior > p.precio && p.precio > 0) ? `<span style="text-decoration:line-through; color:#aaa; font-size:0.9rem;">S/ ${p.precioAnterior.toFixed(2)}</span>` : ''}
                     </div>
-                    
                     ${botonCart}
                 </div>
             </div>`;
