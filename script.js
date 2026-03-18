@@ -129,9 +129,10 @@ async function cargarPaginaTexto(idDestino) {
             ${titulo}
         </h1>
         
+        
         <div style="border-top: 1px solid var(--oro); width: 60px; margin: 20px auto 40px;"></div>
         
-        ${imagen ? `<img src="${limpiarLink(imagen)}" style="max-height: 400px; width: auto; max-width: 100%; display: block; margin: 0 auto 40px; border-radius: 4px;">` : ''}
+        
         
         <div class="cuerpo-texto" style="line-height: 1.8; color: #444; font-size: 1.1rem; text-align: center; max-width: 700px; margin: 0 auto; font-family:'Montserrat';">
             ${cuerpo ? cuerpo.split('\\n').map(p => {
