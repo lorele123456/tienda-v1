@@ -220,6 +220,65 @@ function renderizar(lista) {
                 </div>
             </div>`;
     });
+}function renderizar(lista) {
+    const cont = document.getElementById('product-list');
+    cont.innerHTML = '';
+    
+    lista.forEach(p => {
+        const esFav = favoritos.includes(p.id);
+        
+        // --- LÓGICA DE AGOTADO ---
+        // Asumimos que si el precio es 0, está agotado.
+        // Si tienes una columna de Stock, puedes usar: if (p.stock === 0)
+        let flagAgotado = '';
+        let botonCart = `<button class="btn-add-luxury" onclick="agregarCarrito('${p.id}')">Añadir a selección</button>`;
+        
+        if (p.precio === 0) {
+            flagAgotado = `<div class="sold-out-overlay"><span>AGOTADO</span></div>`;
+            botonCart = `<button class="btn-add-luxury sold-out-btn" disabled>Temporalmente Agotado</button>`;
+        }
+
+        // --- LÓGICA DE DESCUENTO (Solo si no está agotado) ---
+        let badgeDescuento = '';
+        if (p.precioAnterior > p.precio && p.precio > 0) {
+            const porcentaje = Math.round((1 - (p.precio / p.precioAnterior)) * 100);
+            badgeDescuento = `<span class="discount-badge">-${porcentaje}%</span>`;
+        }
+
+        const detallesFormateados = p.detalles.split('\n').map(linea => `<p style="margin-bottom:8px;">${linea}</p>`).join('');
+
+        cont.innerHTML += `
+            <div class="product-card ${p.precio === 0 ? 'product-sold-out' : ''}">
+                <div class="img-container">
+                    <div class="fav-btn-item ${esFav ? 'active' : ''}" onclick="toggleFavorito('${p.id}')">
+                        ${esFav ? '❤️' : '♡'}
+                    </div>
+                    ${badgeDescuento}
+                    
+                    ${flagAgotado}
+                    
+                    <img src="${p.imagen}" onerror="this.src='https://placehold.co/400x600?text=PIETRA+&CO.'">
+                </div>
+                <div class="product-info" style="padding-top:15px; text-align:left;">
+                    <span class="brand-tag-card" style="font-size: 0.6rem; letter-spacing: 2px; color: #999; text-transform: uppercase; display: block; margin-bottom: 5px;">PIETRA & CO.</span>
+                    <h3 style="font-family:'Cormorant Garamond'; font-size:1.3rem; margin-bottom:5px; color:var(--verde); line-height: 1.1;">${p.nombre}</h3>
+                    
+                    <details class="custom-details">
+                        <summary>Detalles de la pieza</summary>
+                        <div class="detalles-contenido">
+                            ${detallesFormateados}
+                        </div>
+                    </details>
+
+                    <div class="price-wrapper" style="display:flex; align-items:center; gap:10px; margin: 15px 0;">
+                        <span style="color:var(--verde); font-weight:bold; font-size:1.2rem;">${p.precio > 0 ? 'S/ ' + p.precio.toFixed(2) : 'Consultar Stock'}</span>
+                        ${(p.precioAnterior > p.precio && p.precio > 0) ? `<span style="text-decoration:line-through; color:#aaa; font-size:0.9rem;">S/ ${p.precioAnterior.toFixed(2)}</span>` : ''}
+                    </div>
+                    
+                    ${botonCart}
+                </div>
+            </div>`;
+    });
 }
 
 function ejecutarBusqueda() {
