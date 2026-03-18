@@ -584,24 +584,46 @@ body {
     border-radius: 10px;
 }
 /* ==================================
-   ESTILOS PARA PRODUCTOS AGOTADOS
-   ================================== */
-
+/* --- OVERLAY AGOTADO DE LUJO --- */
 .sold-out-overlay {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(255,255,255,0.4); /* Blanco traslúcido para no ser tan agresivo */
-    backdrop-filter: blur(3px);
-    display: flex; justify-content: center; align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(128, 0, 0, 0.25); /* Rojo vino tinto muy sutil */
+    backdrop-filter: blur(4px); /* Desenfoque elegante para ver el producto detrás */
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     z-index: 10;
+    transition: 0.3s;
 }
 
 .sold-out-overlay span {
-    background: var(--verde);
+    font-family: 'Montserrat', sans-serif;
     color: white;
-    padding: 8px 15px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    transform: rotate(-5deg);
-    border: 1px solid var(--oro);
+    font-size: 0.9rem;
+    font-weight: 300; /* Más delgado = más lujo */
+    text-transform: uppercase;
+    letter-spacing: 5px; /* Espaciado premium */
+    padding: 12px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.3); /* Fondo oscuro traslúcido */
+}
+
+/* Efecto al pasar el mouse por la tarjeta agotada */
+.product-card.product-sold-out:hover .sold-out-overlay {
+    background: rgba(128, 0, 0, 0.15); /* Se aclara un poco al ver el producto */
+    backdrop-filter: blur(1px);
+}
+
+.sold-out-btn {
+    background: #d1d1d1 !important;
+    color: #777 !important;
+    cursor: not-allowed;
+    letter-spacing: 1px;
+    font-weight: 400 !important;
 }

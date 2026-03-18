@@ -231,14 +231,18 @@ function renderizar(lista) {
         const esFav = favoritos.includes(p.id);
         
         // --- LÓGICA DE AGOTADO ---
-        let flagAgotado = '';
-        let botonCart = `<button class="btn-add-luxury" onclick="agregarCarrito('${p.id}')">Añadir a selección</button>`;
-        
-        // Si el precio es 0 o menor, se marca como agotado
-        if (!p.precio || p.precio <= 0) {
-            flagAgotado = `<div class="sold-out-overlay"><span>AGOTADO</span></div>`;
-            botonCart = `<button class="btn-add-luxury sold-out-btn" disabled style="background:#bbb !important; cursor:not-allowed;">Agotado</button>`;
-        }
+        // Dentro de tu lista.forEach(p => { ... })
+
+let flagAgotado = '';
+let botonCart = `<button class="btn-add-luxury" onclick="agregarCarrito('${p.id}')">Añadir a selección</button>`;
+
+if (!p.precio || p.precio <= 0) {
+    flagAgotado = `
+        <div class="sold-out-overlay">
+            <span>Agotado</span>
+        </div>`;
+    botonCart = `<button class="btn-add-luxury sold-out-btn" disabled>No disponible</button>`;
+}
 
         // --- LÓGICA DE DESCUENTO ---
         let badgeDescuento = '';
